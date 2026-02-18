@@ -1072,10 +1072,9 @@ export default function MijnOrchestra() {
   return (
     <PageTransition>
       {/* Hero */}
-      <section className="relative min-h-[45vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-br from-indigo-950 via-indigo-900 to-indigo-800" />
-        <div className="absolute top-0 right-0 w-100 h-100 bg-teal-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-75 h-75 bg-indigo-500/15 rounded-full blur-3xl" />
+      <section className="relative min-h-[45vh] flex items-center overflow-hidden bg-white">
+        <div className="absolute top-0 right-0 w-100 h-100 bg-indigo-100/60 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-75 h-75 bg-teal-100/40 rounded-full blur-3xl" />
 
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20">
           <div className="max-w-3xl">
@@ -1083,7 +1082,7 @@ export default function MijnOrchestra() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="inline-block text-xs font-body font-semibold tracking-wide uppercase bg-white/10 text-teal-300 px-4 py-1.5 rounded-full backdrop-blur-sm mb-6"
+              className="inline-block text-xs font-body font-semibold tracking-wide uppercase bg-indigo-50 text-indigo-600 px-4 py-1.5 rounded-full mb-6"
             >
               Online Kantooromgeving
             </motion.span>
@@ -1091,7 +1090,7 @@ export default function MijnOrchestra() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white leading-[1.1] mb-6"
+              className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-slate-900 leading-[1.1] mb-6"
             >
               Mijn Orchestra
             </motion.h1>
@@ -1105,7 +1104,7 @@ export default function MijnOrchestra() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
-              className="text-lg lg:text-xl text-indigo-200 leading-relaxed max-w-2xl mb-10"
+              className="text-lg lg:text-xl text-slate-500 leading-relaxed max-w-2xl mb-10"
             >
               Uw complete online kantooromgeving voor stichtingen en verenigingen. Veilig, overzichtelijk en altijd beschikbaar.
             </motion.p>
@@ -1159,17 +1158,17 @@ export default function MijnOrchestra() {
       {/* CTA */}
       <SectionWrapper bg="dark">
         <AnimatedSection className="text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-white mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-slate-900 mb-6">
             Klaar om te beginnen?
           </h2>
-          <p className="text-lg text-indigo-200 mb-10">
+          <p className="text-lg text-slate-500 mb-10">
             Log direct in op uw MyOrchestra-omgeving of neem contact met ons op.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Button href={OFIS_URL} external variant="primary" size="lg">
               Inloggen
             </Button>
-            <Button href="/contact" variant="outline-light" size="lg">
+            <Button href="/contact" variant="outline" size="lg">
               Neem Contact Op
             </Button>
           </div>

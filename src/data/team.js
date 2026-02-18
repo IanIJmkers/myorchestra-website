@@ -24,6 +24,14 @@ const members = [
     photo: "/images/team/dave-price.jpg",
   },
   {
+    name: "Arjan van Gulick",
+    role: "MyOrchestra Director",
+    email: "a.vangulick@orchestra-contact.com",
+    phone: "070-2197210",
+    linkedin: "https://www.linkedin.com/in/arjan-van-gulick-77273ab6",
+    photo: "/images/team/arjan-van-gulick.jpg",
+  },
+  {
     name: "Guus Drijver",
     role: "Business Development",
     email: "g.drijver@orchestra-contact.com",
@@ -53,14 +61,6 @@ const members = [
     email: "k.vanbuuren@orchestra-contact.com",
     phone: "070-2197212",
     photo: "/images/team/kilian-van-buuren.jpg",
-  },
-  {
-    name: "Arjan van Gulick",
-    role: "Accountmanager",
-    email: "a.vangulick@orchestra-contact.com",
-    phone: "070-2197210",
-    linkedin: "https://www.linkedin.com/in/arjan-van-gulick-77273ab6",
-    photo: "/images/team/arjan-van-gulick.jpg",
   },
   {
     name: "Emma van Steijn",

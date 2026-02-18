@@ -22,7 +22,7 @@ export default function MobileMenu({ open, onClose }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-indigo-950/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm z-50"
             onClick={onClose}
           />
 
@@ -32,7 +32,7 @@ export default function MobileMenu({ open, onClose }) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-            className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-indigo-950 z-50 overflow-y-auto"
+            className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-white z-50 overflow-y-auto shadow-xl"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6">
@@ -40,13 +40,13 @@ export default function MobileMenu({ open, onClose }) {
                 <div className="w-8 h-8 rounded-lg bg-linear-to-br from-indigo-500 to-teal-400 flex items-center justify-center">
                   <span className="text-white text-sm font-bold">M</span>
                 </div>
-                <span className="text-xl font-heading font-bold text-white">
+                <span className="text-xl font-heading font-bold text-slate-900">
                   {siteMetadata.companyName}
                 </span>
               </div>
               <button
                 onClick={onClose}
-                className="p-2 text-white/70 hover:text-white"
+                className="p-2 text-slate-400 hover:text-slate-900"
                 aria-label="Close menu"
               >
                 <svg
@@ -68,15 +68,15 @@ export default function MobileMenu({ open, onClose }) {
             {/* Navigation */}
             <nav className="px-6 pb-8">
               {navigation.map((item) => (
-                <div key={item.label} className="border-b border-indigo-900">
+                <div key={item.label} className="border-b border-slate-100">
                   {item.children ? (
                     <>
                       <button
                         onClick={() => toggleExpand(item.label)}
                         className={`w-full flex items-center justify-between py-4 text-lg font-medium ${
                           location.pathname.startsWith("/Oplossingen")
-                            ? "text-teal-400"
-                            : "text-white/90 hover:text-white"
+                            ? "text-indigo-600"
+                            : "text-slate-700 hover:text-slate-900"
                         }`}
                       >
                         {item.label}
@@ -113,8 +113,8 @@ export default function MobileMenu({ open, onClose }) {
                                   onClick={onClose}
                                   className={`block py-2 text-sm ${
                                     location.pathname === child.path
-                                      ? "text-teal-400 font-medium"
-                                      : "text-indigo-200 hover:text-white"
+                                      ? "text-indigo-600 font-medium"
+                                      : "text-slate-500 hover:text-slate-900"
                                   }`}
                                 >
                                   {child.label}
@@ -131,8 +131,8 @@ export default function MobileMenu({ open, onClose }) {
                       onClick={onClose}
                       className={`block py-4 text-lg font-medium ${
                         location.pathname === item.path
-                          ? "text-teal-400"
-                          : "text-white/90 hover:text-white"
+                          ? "text-indigo-600"
+                          : "text-slate-700 hover:text-slate-900"
                       }`}
                     >
                       {item.label}

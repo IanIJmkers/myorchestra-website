@@ -16,16 +16,13 @@ export default function Navbar() {
   const isScrolled = scrollY > 20;
   const isHidden = scrollDirection === "down" && scrollY > 200;
 
-  const isHomePage = location.pathname === "/";
-  const useTransparent = isHomePage && !isScrolled;
-
   return (
     <>
       <motion.header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          useTransparent
-            ? "bg-transparent"
-            : "bg-white/80 backdrop-blur-xl shadow-nav"
+          isScrolled
+            ? "bg-white/80 backdrop-blur-xl shadow-nav"
+            : "bg-transparent"
         }`}
         animate={{ y: isHidden ? -100 : 0 }}
         transition={{ duration: 0.3 }}
@@ -34,11 +31,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
-              <span
-                className={`text-xl font-heading font-bold ${
-                  useTransparent ? "text-white" : "text-slate-900"
-                }`}
-              >
+              <span className="text-xl font-heading font-bold text-slate-900">
                 {siteMetadata.companyName}
               </span>
             </Link>
@@ -57,16 +50,8 @@ export default function Navbar() {
                   {item.path ? (
                     <Link
                       to={item.path}
-                      className={`px-4 py-2 text-sm font-medium transition-colors duration-200 relative group ${
-                        useTransparent
-                          ? "text-white/90 hover:text-white"
-                          : "text-slate-600 hover:text-slate-900"
-                      } ${
-                        location.pathname === item.path
-                          ? useTransparent
-                            ? "text-white"
-                            : "text-slate-900"
-                          : ""
+                      className={`px-4 py-2 text-sm font-medium transition-colors duration-200 relative group text-slate-600 hover:text-slate-900 ${
+                        location.pathname === item.path ? "text-slate-900" : ""
                       }`}
                     >
                       {item.label}
@@ -80,15 +65,9 @@ export default function Navbar() {
                     </Link>
                   ) : (
                     <button
-                      className={`px-4 py-2 text-sm font-medium transition-colors duration-200 relative group ${
-                        useTransparent
-                          ? "text-white/90 hover:text-white"
-                          : "text-slate-600 hover:text-slate-900"
-                      } ${
+                      className={`px-4 py-2 text-sm font-medium transition-colors duration-200 relative group text-slate-600 hover:text-slate-900 ${
                         location.pathname.startsWith("/Oplossingen")
-                          ? useTransparent
-                            ? "text-white"
-                            : "text-slate-900"
+                          ? "text-slate-900"
                           : ""
                       }`}
                     >
@@ -143,9 +122,7 @@ export default function Navbar() {
               aria-label="Open menu"
             >
               <svg
-                className={`w-6 h-6 ${
-                  useTransparent ? "text-white" : "text-slate-900"
-                }`}
+                className="w-6 h-6 text-slate-900"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

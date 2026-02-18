@@ -17,12 +17,12 @@ export default function SolutionProjectAdmin() {
   return (
     <PageTransition>
       {/* Hero */}
-      <section className="relative pt-32 pb-20 bg-linear-to-br from-indigo-950 via-indigo-900 to-indigo-800 overflow-hidden">
-        <div className="absolute top-0 right-0 w-100 h-100 bg-teal-500/10 rounded-full blur-3xl" />
+      <section className="relative pt-32 pb-20 bg-white overflow-hidden">
+        <div className="absolute top-0 right-0 w-100 h-100 bg-indigo-100/60 rounded-full blur-3xl" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm text-indigo-300 hover:text-white transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-sm text-indigo-500 hover:text-indigo-700 transition-colors mb-8"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -33,7 +33,7 @@ export default function SolutionProjectAdmin() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white mb-6"
+            className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-slate-900 mb-6"
           >
             {mod.title}
           </motion.h1>
@@ -41,7 +41,7 @@ export default function SolutionProjectAdmin() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg text-indigo-200 max-w-2xl"
+            className="text-lg text-slate-500 max-w-2xl"
           >
             {mod.fullDescription}
           </motion.p>

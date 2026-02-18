@@ -3,14 +3,11 @@ import Button from "../ui/Button";
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-indigo-950">
-      {/* Gradient background */}
-      <div className="absolute inset-0 bg-linear-to-br from-indigo-950 via-indigo-900 to-indigo-800" />
-
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-white">
       {/* Decorative gradient mesh blobs */}
-      <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-teal-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-indigo-500/20 rounded-full blur-3xl" />
-      <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-indigo-400/10 rounded-full blur-3xl" />
+      <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-indigo-100/60 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-teal-100/40 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-indigo-50/80 rounded-full blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-32">
         <div className="max-w-3xl">
@@ -19,7 +16,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-block text-xs font-body font-semibold tracking-wide uppercase bg-white/10 text-teal-300 px-4 py-1.5 rounded-full backdrop-blur-sm mb-8"
+            className="inline-block text-xs font-body font-semibold tracking-wide uppercase bg-indigo-50 text-indigo-600 px-4 py-1.5 rounded-full mb-8"
           >
             Overzicht &middot; Veiligheid &middot; Efficiency &middot; Impact
           </motion.span>
@@ -33,10 +30,10 @@ export default function HeroSection() {
               delay: 0.3,
               ease: [0.25, 0.1, 0.25, 1],
             }}
-            className="text-4xl sm:text-5xl lg:text-7xl font-heading font-extrabold text-white leading-[1.05] mb-8"
+            className="text-4xl sm:text-5xl lg:text-7xl font-heading font-extrabold text-slate-900 leading-[1.05] mb-8"
           >
             Het collectieve geheugen van uw stichting of vereniging op{" "}
-            <span className="bg-linear-to-r from-teal-300 to-teal-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-indigo-600 to-teal-500 bg-clip-text text-transparent">
               één veilige plek
             </span>
           </motion.h1>
@@ -46,7 +43,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.5 }}
-            className="text-lg lg:text-xl text-indigo-200 leading-relaxed max-w-2xl mb-10"
+            className="text-lg lg:text-xl text-slate-500 leading-relaxed max-w-2xl mb-10"
           >
             De enige online kantooromgeving specifiek ontwikkeld voor
             stichtingen en verenigingen. Al uw financiën, projecten, documenten
@@ -67,7 +64,7 @@ export default function HeroSection() {
             >
               Ontdek de Modules
             </Button>
-            <Button href="/contact" variant="outline-light" size="lg">
+            <Button href="/contact" variant="outline" size="lg">
               Neem Contact Op
             </Button>
           </motion.div>
@@ -81,7 +78,7 @@ export default function HeroSection() {
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       >
         <svg
-          className="w-6 h-6 text-white/40"
+          className="w-6 h-6 text-slate-300"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
