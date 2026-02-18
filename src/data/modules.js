@@ -6,7 +6,7 @@ export const modules = [
       "Digitale ontvangst van aanvragen met gecentraliseerd informatiebeheer.",
     fullDescription:
       "De module projectadministratie maakt het mogelijk om aanvragen digitaal te ontvangen, waarbij alle informatie rondom die aanvragen op één centrale plek staat. Door grip te behouden op deze informatie zorgt u ervoor dat uw charitatieve instelling altijd compliant is met wet en regelgeving. De role and rule based gebruikersgroepen zorgen ervoor dat de governance op orde is.",
-    path: "/solutions/project-administration",
+    path: "/Oplossingen/project-administration",
     icon: "ClipboardDocumentListIcon",
     features: [
       {
@@ -145,31 +145,34 @@ export const modules = [
     shortDescription:
       "Geïntegreerde financiële administratie gevuld vanuit meerdere modules.",
     fullDescription:
-      "De financiële administratie wordt automatisch gevuld vanuit de andere modules. Rapportages, facturatie en governance zijn volledig geïntegreerd, wat zorgt voor een compleet en actueel financieel overzicht.",
-    path: "/solutions/financial-administration",
+      "Een essentieel aspect van MyOrchestra is de financiële administratie, die uw bestuur volledige grip geeft op de financiële situatie van uw organisatie.",
+    path: "/Oplossingen/financial-administration",
     icon: "CurrencyEuroIcon",
     features: [
       {
-        title: "Geïntegreerde Boekhouding",
+        title: "Rapportages",
         description:
-          "Financiële gegevens worden automatisch bijgewerkt vanuit alle modules.",
+          "De rapportagemodule zorgt ervoor dat uw bestuur 24/7 grip heeft op de cijfers van de gehele organisatie. Door de naadloze integratie met verschillende andere modules is het heel eenvoudig om bijvoorbeeld snel te zien waar bepaalde posten vandaan komen.",
       },
       {
         title: "Facturatie",
         description:
-          "Maak en verstuur facturen direct vanuit het platform.",
+          "Met deze module is het registeren van zowel binnenkomende als zowel uitgaande facturen in een handomdraai te doen. Uitgaande facturenmodule genereert u én verzendt u via MyOrchestra. Zo zorgt u voor een inzichtelijk debiteurenbeheer.",
       },
       {
-        title: "Financiële Rapportages",
+        title: "Governance",
         description:
-          "Genereer jaarrekeningen, begrotingen en tussentijdse rapportages.",
-      },
-      {
-        title: "Governance & Compliance",
-        description:
-          "Voldoe aan alle eisen met het vier-ogen-principe en audit trails.",
+          "Door ons 'meer-ogenprincipe' adviseren wij over de verplichtingen van uw bestuurders en toezichthouders, maar borgen wij meteen ook een logische rol- en taakverdeling binnen uw organisatie.",
       },
     ],
+    rapportages: {
+      description:
+        "De Balans en Staat van Baten en lasten zijn volledig op maat in te richten naar de wensen van uw organisatie. De overzichten geven bestuursleden 24/7 inzicht in de cijfers van uw organisatie en er kan eenvoudig worden doorgeklikt om verder in te zoomen op de cijfers.",
+      images: [
+        "/images/solutions/financial-admin/balans.png",
+        "/images/solutions/financial-admin/svbl.png",
+      ],
+    },
     detailedFeatures: [
       {
         eyebrow: "Binnenkomende facturen",
@@ -182,7 +185,7 @@ export const modules = [
         eyebrow: "Uitgaande facturen",
         title: "Uitgaande facturen",
         description:
-          "Eenvoudig registreren van uitgaande facturen met uw eigen huisstijl. Het versturen van facturen kan op meerdere manieren. Je kunt de facturen printen en per post versturen of digitaal via MyOrchestra.",
+          "Eenvoudig registreren van uitgaande facturen met uw eigen huisstijl. Het versturen van facturen kan op meerdere manieren. Er zijn verschillende manieren om te versturen, printen en per post versturen of digitaal via MyOrchestra.",
         image: "/images/solutions/financial-admin/outgoing-invoice.png",
       },
       {
@@ -193,6 +196,23 @@ export const modules = [
         image: "/images/solutions/financial-admin/project-analysis.png",
       },
     ],
+    faq: [
+      {
+        question: "Hoe zorgt het systeem voor de governance?",
+        answer:
+          "Door ons 'meer-ogenprincipe' adviseren wij over de verplichtingen van uw bestuurders en toezichthouders, maar borgen wij meteen ook een logische rol- en taakverdeling binnen uw organisatie.",
+      },
+      {
+        question: "Hoe worden betaalopdrachten gegenereerd?",
+        answer:
+          "Bij het registreren van binnenkomende facturen kan worden aangegeven of een factuur betaald dient te worden. Indien dit wordt aangevinkt zal er na autorisatie van de factuur automatisch een betaalopdracht worden aangemaakt in het systeem. Die betaalopdracht kan vervolgens door de desbetreffende autorisatiegroep worden geautoriseerd.",
+      },
+      {
+        question: "Beschikken jullie over een app om goed te keuren?",
+        answer:
+          "Wij beschikken over een mobiele app voor het goedkeuren van facturen- en betaalopdrachten.",
+      },
+    ],
   },
   {
     id: "relationship-management",
@@ -200,29 +220,65 @@ export const modules = [
     shortDescription:
       "Centrale database voor het beheer van leveranciers, klanten, donateurs en projectrelaties.",
     fullDescription:
-      "Beheer al uw relaties vanuit één centraal systeem. Van leveranciers en klanten tot donateurs en projectpartners — alle contactgegevens en interacties zijn overzichtelijk vastgelegd.",
-    path: "/solutions/relationship-management",
+      "De module relatiebeheer is dé plek voor het terugvinden van alle zaken rondom een relatie van uw organisatie. Door het selecteren van verschillende relatietypes worden er relevante overzichten getoond.",
+    path: "/Oplossingen/relationship-management",
     icon: "UsersIcon",
     features: [
       {
-        title: "Centraal Contactbeheer",
+        title: "Relatietypes",
         description:
-          "Alle relaties op één plek met volledige contacthistorie.",
+          "Het relatiebeheer geeft een overzicht van verschillende type relaties. De standaard relatietypes die het systeem aanbiedt zijn leveranciers, klanten, donateurs en projectrelaties. Aan de hand van het relatietype worden relevante overzichten en instellingen getoond.",
       },
       {
-        title: "Categorisatie",
+        title: "Labels",
         description:
-          "Organiseer relaties op type: leverancier, donateur, begunstigde, etc.",
+          "Om eenvoudig te filteren op verschillende groepen relaties kan er gebruik gemaakt worden van de relatielabels. Een voorbeeld van een relatielabel is het label nieuwsbrief, na het selecteren van het label worden enkel de relaties getoond met het label nieuwsbrief.",
       },
       {
-        title: "Communicatiehistorie",
+        title: "Oormerken en incassoronde",
         description:
-          "Bewaar alle correspondentie en interacties per relatie.",
+          "Om ervoor te zorgen dat donaties de juiste oormerken mee krijgen kan er bij de donateursrelatie in worden gesteld voor welk specifiek oormerk gegeven wordt. Het systeem beschikt ook over de mogelijkheid om afgegeven machtigingen in te voeren en vervolgens een incassoronde te draaien.",
+      },
+    ],
+    detailedFeatures: [
+      {
+        eyebrow: "Relatiekenmerken",
+        title: "Relatiekenmerken",
+        description:
+          "Pas specifieke kenmerken aan die essentieel zijn voor uw organisatie, en gebruik relatielabels om gemakkelijk te selecteren binnen specifieke relatiegroepen.",
+        image: "/images/solutions/relationship-mgmt/people-kenmerk.png",
       },
       {
-        title: "Koppeling met Projecten",
+        eyebrow: "Integratie",
+        title: "Naadloze integratie met andere modules",
         description:
-          "Link relaties direct aan projecten voor volledig overzicht.",
+          "Dankzij de naadloze integratie van het CRM met andere modules in MyOrchestra heeft uw organisatie een allesomvattend overzicht van relatie-informatie op de relatiekaart.",
+        image: "/images/solutions/relationship-mgmt/people-network.png",
+      },
+      {
+        eyebrow: "Relatiemanagement",
+        title: "Efficiënt Relatiemanagement",
+        description:
+          "MyOrchestra biedt uitgebreide relatiekaarten waarin u contactmomenten, documentatie, herinneringen en e-mails kunt versturen, waardoor het beheren van relaties moeiteloos wordt.",
+        image: "/images/solutions/relationship-mgmt/relatie-management.png",
+      },
+    ],
+    faq: [
+      {
+        question: "Kunnen er incassorondes worden gedraaid via het systeem?",
+        answer:
+          "Het is mogelijk om incassorondes te draaien via het systeem. Bij de donateursrelaties dient dan een afgegeven machtiging te worden ingesteld, vervolgens zal bij het draaien van de incassoronde gekeken worden naar welke donateurs geïncasseerd dienen te worden.",
+      },
+      {
+        question: "Kan een ontvangen donatie gekoppeld worden aan een relatie?",
+        answer:
+          "Ja dat is mogelijk. Wanneer een donatie wordt ontvangen kan er gekozen worden deze te koppelen aan een donateur. Het systeem doet op basis van het bankrekeningnummer een check of een donateur al voorkomt in het systeem. Op de donateursrelatie kan worden ingesteld voor welk oormerk gegeven wordt.",
+      },
+      {
+        question:
+          "Kan ik meerdere contactpersonen bij hetzelfde bedrijf toevoegen?",
+        answer:
+          "Ja er is een mogelijkheid om meerdere contactpersonen (connecties) bij een organisatie toe te voegen.",
       },
     ],
   },
@@ -232,29 +288,64 @@ export const modules = [
     shortDescription:
       "Digitaal vergaderplatform voor bestuursleden om vergaderingen in te zien en bij te wonen.",
     fullDescription:
-      "De vergadermodule biedt bestuursleden een veilige digitale omgeving om vergaderstukken in te zien, agenda's te raadplegen en besluiten vast te leggen. De secretaris bereidt alles voor, het bestuur kan overal bij.",
-    path: "/solutions/meeting-module",
+      "MyOrchestra biedt een plek voor bestuursleden om digitaal een vergadering in te zien en/of bij te wonen.",
+    path: "/Oplossingen/meeting-module",
     icon: "CalendarDaysIcon",
     features: [
       {
-        title: "Digitale Agenda",
+        title: "Notities & Verslaglegging",
         description:
-          "Plan en beheer vergaderingen met een overzichtelijke digitale agenda.",
+          "Bestuursleden kunnen tijdens de vergadering notities maken en deze delen met andere genodigden. De notulist kan direct de besluiten en actiepunten vastleggen in de vergadermodule.",
       },
       {
-        title: "Vergaderstukken",
+        title: "Documenten & Aanvragen",
         description:
-          "Deel documenten veilig met bestuursleden vóór de vergadering.",
+          "Genodigden hebben toegang tot relevante documenten die voorafgaand aan de vergadering zijn geüpload, zoals agenda's en rapporten. Aanvragen kunnen tijdens een vergadering worden behandeld.",
       },
       {
-        title: "Besluitenregister",
+        title: "Herinneringen & Ondertekening",
         description:
-          "Leg besluiten vast en volg actiepunten op na elke vergadering.",
+          "Eenvoudig verzenden van herinneringen naar genodigden om ervoor te zorgen dat ze op de hoogte zijn van aanstaande vergaderingen. Digitaal de notulen ondertekenen.",
+      },
+    ],
+    detailedFeatures: [
+      {
+        eyebrow: "Vergaderen",
+        title: "Efficiënt vergaderen",
+        description:
+          "MyOrchestra stelt bestuursleden in staat om digitaal vergaderingen bij te wonen die zijn opgezet door de notulist. Via de vergadermodule kan de notulist de agenda voorbereiden door agendapunten toe te voegen.",
+        image: "/images/solutions/meeting-module/team-meeting.png",
       },
       {
-        title: "Aanwezigheidsregistratie",
+        eyebrow: "Integratie",
+        title: "Integratie projectadministratie",
         description:
-          "Registreer aanwezigheid en stemgedrag automatisch.",
+          "Door de integratie met andere modules kan de vergadermodule automatisch andere delen van het systeem bijwerken, zoals de projectadministratie. Als de module projectadministratie wordt gebruikt, zullen de aanvragen die moeten worden behandeld ook verschijnen in de vergadermodule.",
+        image: "/images/solutions/meeting-module/contact-book.png",
+      },
+      {
+        eyebrow: "Ondertekenen",
+        title: "Ondertekenen van de notulen",
+        description:
+          "Na voorbereiding kunnen uitnodigingen naar alle genodigden worden verzonden via MyOrchestra, waarna bestuursleden de mogelijkheid hebben om online te ondertekenen na afsluiting van de vergadering. De vergadermodule genereert vervolgens automatisch notulen in PDF-formaat.",
+        image: "/images/solutions/meeting-module/checklist.png",
+      },
+    ],
+    faq: [
+      {
+        question: "Hoe zorgt het systeem voor de governance?",
+        answer:
+          "Na het afsluiten van een vergadering door de notulist, kan er een uitnodiging gestuurd worden naar alle genodigden om de notulen te ondertekenen.",
+      },
+      {
+        question: "Kunnen aanvragen behandeld worden tijdens de vergadering?",
+        answer:
+          "Ja dat is mogelijk. Tijdens een vergadering kan een openstaande aanvraag worden behandeld. Op het moment dat er een besluit is gevormd kan de notulist stemmen indienen namens de bestuursleden.",
+      },
+      {
+        question: "Wat kan er toegevoegd worden onder een agendapunt?",
+        answer:
+          "Een agendapunt beschikt over verschillende invoervelden, er is voldoende ruimte om opmerkingen, acties, besluiten en documentatie toe te voegen.",
       },
     ],
   },
@@ -264,29 +355,65 @@ export const modules = [
     shortDescription:
       "Het collectieve geheugen van uw organisatie als centrale opslagplaats voor historische documentatie.",
     fullDescription:
-      "De documentkluis is het collectieve geheugen van uw organisatie. Bewaar alle belangrijke documenten veilig en gestructureerd, zodat kennis behouden blijft — ook bij wisselingen in het bestuur.",
-    path: "/solutions/document-vault",
+      "Deze digitale kluis is een centrale plek om alle historie van en voor uw organisatie te waarborgen. Hierdoor zorgt u ervoor dat het collectief geheugen van uw organisatie bewaard blijft.",
+    path: "/Oplossingen/document-vault",
     icon: "LockClosedIcon",
     features: [
       {
-        title: "Veilige Opslag",
+        title: "Documenten",
         description:
-          "Bewaar documenten versleuteld en beschermd tegen ongeautoriseerde toegang.",
+          "Eenvoudig uploaden van documentatie in uw online kantoor omgeving, zo zorgt u ervoor dat alle relevante documentatie van de organisatie bewaard blijft en inzichtelijk is voor alle bestuursleden.",
       },
       {
-        title: "Versiebeheer",
+        title: "Labels",
         description:
-          "Houd alle versies van documenten bij en herstel eerdere versies.",
+          "Documenten kunnen verrijkt worden met document labels, hierdoor wordt er een overzichtelijk overzicht gemaakt van alle documenten.",
       },
       {
-        title: "Zoekfunctie",
+        title: "Opzoeken",
         description:
-          "Vind elk document snel terug met krachtige zoek- en filtermogelijkheden.",
+          "Het opzoeken van documenten kan op meerdere manieren, zo kunt u op naam documentatie opzoeken of filteren op document labels. Documenten zijn inzichtelijk via de documentkluis of te downloaden.",
+      },
+    ],
+    detailedFeatures: [
+      {
+        eyebrow: "Opslag",
+        title: "Centrale opslag",
+        description:
+          "Alle documenten, van contracten tot beleidsdocumenten, worden op één centrale locatie bewaard, waardoor ze gemakkelijk toegankelijk zijn voor geautoriseerde gebruikers.",
+        image: "/images/solutions/document-vault/central-storage.png",
       },
       {
-        title: "Toegangsbeheer",
+        eyebrow: "Integratie",
+        title: "Integratie met andere modules",
         description:
-          "Bepaal per document of map wie toegang heeft met granulaire rechten.",
+          "Documenten kunnen eenvoudig worden gekoppeld aan gerelateerde taken, projecten of contacten binnen MyOrchestra, waardoor een naadloze workflow ontstaat.",
+        image: "/images/solutions/document-vault/integration.png",
+      },
+      {
+        eyebrow: "Zoeken",
+        title: "Zoekfunctionaliteit",
+        description:
+          "De documentkluis is voorzien van krachtige zoekfuncties waarmee gebruikers snel specifieke documenten kunnen vinden op basis van trefwoorden, tags of metadata.",
+        image: "/images/solutions/document-vault/search.png",
+      },
+    ],
+    faq: [
+      {
+        question: "Kan ik meerdere documenten tegelijk uploaden?",
+        answer:
+          "Het is mogelijk om meerdere documenten tegelijkertijd te uploaden.",
+      },
+      {
+        question:
+          "Is het mogelijk om de benaming van een document aan te passen?",
+        answer:
+          "Het hernoemen van documenten kan via het systeem. Alle aanpassingen worden geregistreerd zodat wijzigingen niet verloren gaan.",
+      },
+      {
+        question: "Hoe werkt het labelen van documenten?",
+        answer:
+          "Documenten kunnen verrijkt worden met labels. Door gebruik te maken van labels en geen 'oude' mappenstructuur hoeft u niet te zoeken in specifieke mappen, maar kunt u door middel van labels documenten sneller terugvinden.",
       },
     ],
   },

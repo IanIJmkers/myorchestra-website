@@ -3,7 +3,7 @@ import { siteMetadata } from "../../data/siteMetadata";
 
 export default function Footer() {
   const quickLinks = [
-    { label: "Solutions", path: "/solutions/project-administration" },
+    { label: "Oplossingen", path: "/Oplossingen/project-administration" },
     { label: "Onze Klanten", path: "/clients" },
     { label: "Over Ons", path: "/about" },
     { label: "Contact", path: "/contact" },

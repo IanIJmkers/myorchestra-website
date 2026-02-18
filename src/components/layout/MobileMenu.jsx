@@ -74,7 +74,7 @@ export default function MobileMenu({ open, onClose }) {
                       <button
                         onClick={() => toggleExpand(item.label)}
                         className={`w-full flex items-center justify-between py-4 text-lg font-medium ${
-                          location.pathname.startsWith("/solutions")
+                          location.pathname.startsWith("/Oplossingen")
                             ? "text-teal-400"
                             : "text-white/90 hover:text-white"
                         }`}

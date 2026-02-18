@@ -3,8 +3,9 @@ import { motion } from "motion/react";
 import PageTransition from "../components/animation/PageTransition";
 import AnimatedSection from "../components/animation/AnimatedSection";
 import SectionWrapper from "../components/layout/SectionWrapper";
+import SectionHeading from "../components/ui/SectionHeading";
 import StaggerChildren, { staggerItem } from "../components/animation/StaggerChildren";
-import FeatureShowcase from "../components/sections/FeatureShowcase";
+import FAQAccordion from "../components/sections/FAQAccordion";
 import CTASection from "../components/sections/CTASection";
 import { modules } from "../data/modules";
 
@@ -46,55 +47,139 @@ export default function SolutionFinancialAdmin() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* Key Features - 3 cards */}
       <SectionWrapper bg="white">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-          <AnimatedSection direction="left">
-            <span className="inline-block text-xs font-body font-semibold tracking-wide uppercase px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 mb-4">
-              Functionaliteiten
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 mb-6">
-              Compleet financieel overzicht
-            </h2>
-            <p className="text-slate-500 leading-relaxed">
-              {mod.fullDescription}
-            </p>
-          </AnimatedSection>
-          <StaggerChildren className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {mod.features.map((feature, i) => (
-              <motion.div
-                key={i}
-                variants={staggerItem}
-                className="bg-white border border-slate-200/60 rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center mb-4">
-                  <span className="text-indigo-600 font-heading font-bold text-sm">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
+        <SectionHeading
+          eyebrow="Kernfunctionaliteiten"
+          title="Compleet financieel overzicht"
+        />
+        <StaggerChildren className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          {mod.features.map((feature, i) => (
+            <motion.div
+              key={i}
+              variants={staggerItem}
+              className="bg-white border border-slate-200/60 rounded-2xl p-8 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center mb-5">
+                <span className="text-indigo-600 font-heading font-bold">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              </div>
+              <h3 className="font-heading font-bold text-slate-900 text-lg mb-3">
+                {feature.title}
+              </h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                {feature.description}
+              </p>
+            </motion.div>
+          ))}
+        </StaggerChildren>
+      </SectionWrapper>
+
+      {/* Rapportages Section */}
+      <SectionWrapper bg="surface">
+        <SectionHeading
+          eyebrow="Rapportages"
+          title="Rapportages"
+          subtitle={mod.rapportages.description}
+        />
+        <StaggerChildren className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          {mod.rapportages.images.map((image, i) => (
+            <motion.div
+              key={i}
+              variants={staggerItem}
+              className="flex justify-center"
+            >
+              <img
+                src={image}
+                alt={i === 0 ? "Balans" : "Staat van Baten en Lasten"}
+                className="w-full max-w-md h-auto rounded-2xl shadow-card"
+                loading="lazy"
+              />
+            </motion.div>
+          ))}
+        </StaggerChildren>
+      </SectionWrapper>
+
+      {/* Boekhoudmodule - Connected Timeline */}
+      <SectionWrapper bg="white">
+        <SectionHeading
+          eyebrow="Boekhoudmodule"
+          title="Stap voor stap"
+        />
+        <div className="relative mt-20">
+          {/* Vertical connecting line (desktop only) */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-linear-to-b from-indigo-200 via-indigo-300 to-teal-200 hidden lg:block" />
+
+          <div className="space-y-16 lg:space-y-24">
+            {mod.detailedFeatures.map((feature, i) => {
+              const isReverse = i % 2 !== 0;
+              return (
+                <div key={i} className="relative">
+                  {/* Step number on the line (desktop) */}
+                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden lg:flex">
+                    <div className="w-12 h-12 rounded-full bg-white border-2 border-indigo-300 flex items-center justify-center shadow-sm">
+                      <span className="text-indigo-600 font-heading font-bold text-sm">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-center">
+                    {/* Image side */}
+                    <AnimatedSection
+                      direction={isReverse ? "right" : "left"}
+                      className={isReverse ? "lg:order-2" : ""}
+                    >
+                      <div className="flex justify-center">
+                        <img
+                          src={feature.image}
+                          alt={feature.title}
+                          className="w-full max-w-70 lg:max-w-xs h-auto drop-shadow-lg"
+                          loading="lazy"
+                        />
+                      </div>
+                    </AnimatedSection>
+
+                    {/* Text side */}
+                    <AnimatedSection
+                      direction={isReverse ? "left" : "right"}
+                      delay={0.15}
+                      className={isReverse ? "lg:order-1" : ""}
+                    >
+                      {/* Step number (mobile) */}
+                      <div className="flex items-center gap-3 mb-4 lg:hidden">
+                        <div className="w-10 h-10 rounded-full bg-white border-2 border-indigo-300 flex items-center justify-center shadow-sm">
+                          <span className="text-indigo-600 font-heading font-bold text-xs">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                        </div>
+                        <div className="h-px flex-1 bg-linear-to-r from-indigo-200 to-transparent" />
+                      </div>
+                      <span className="inline-block text-xs font-body font-semibold tracking-wide uppercase px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 mb-4">
+                        {feature.eyebrow}
+                      </span>
+                      <h3 className="text-2xl sm:text-3xl font-heading font-bold text-slate-900 mb-4">
+                        {feature.title}
+                      </h3>
+                      <p className="text-slate-500 leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </AnimatedSection>
+                  </div>
                 </div>
-                <h3 className="font-heading font-bold text-slate-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-sm text-slate-500">{feature.description}</p>
-              </motion.div>
-            ))}
-          </StaggerChildren>
+              );
+            })}
+          </div>
         </div>
       </SectionWrapper>
 
-      {/* Boekhoudmodule - Detailed Feature Sections */}
-      {mod.detailedFeatures.map((feature, i) => (
-        <FeatureShowcase
-          key={i}
-          eyebrow={feature.eyebrow}
-          title={feature.title}
-          description={feature.description}
-          imageSrc={feature.image}
-          imageAlt={feature.title}
-          reverse={i % 2 !== 0}
-          bg={i % 2 === 0 ? "surface" : "white"}
-        />
-      ))}
+      {/* FAQ */}
+      <FAQAccordion
+        eyebrow="Veelgestelde Vragen"
+        title="Veelgestelde vragen financiële administratie"
+        items={mod.faq}
+      />
 
       {/* Other Modules */}
       <SectionWrapper bg="surface" size="md">
@@ -121,7 +206,10 @@ export default function SolutionFinancialAdmin() {
         </div>
       </SectionWrapper>
 
-      <CTASection />
+      <CTASection
+        title="Direct advies van een specialist?"
+        subtitle="Maak nu een afspraak met een van onze MyOrchestra-specialisten. Dan kijken we samen hoe we uw rust en overzicht aanzienlijk kunnen verhogen met de inzet van MyOrchestra."
+      />
     </PageTransition>
   );
 }

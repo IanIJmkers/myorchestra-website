@@ -17,11 +17,11 @@ export default function FeatureShowcase({
           direction={reverse ? "right" : "left"}
           className={reverse ? "lg:order-2" : ""}
         >
-          <div className="rounded-2xl overflow-hidden border border-slate-200/60 shadow-card">
+          <div className="flex justify-center">
             <img
               src={imageSrc}
               alt={imageAlt || title}
-              className="w-full h-auto"
+              className="w-full max-w-sm h-auto"
               loading="lazy"
             />
           </div>

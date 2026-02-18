@@ -48,9 +48,9 @@ export default function HeroSection() {
             transition={{ duration: 0.7, delay: 0.5 }}
             className="text-lg lg:text-xl text-indigo-200 leading-relaxed max-w-2xl mb-10"
           >
-            De enige online kantooromgeving specifiek ontwikkeld voor stichtingen
-            en verenigingen. Al uw financiën, projecten, documenten en
-            vergaderstukken op één centrale plek.
+            De enige online kantooromgeving specifiek ontwikkeld voor
+            stichtingen en verenigingen. Al uw financiën, projecten, documenten
+            en vergaderstukken op één centrale plek.
           </motion.p>
 
           {/* CTAs */}
@@ -61,7 +61,7 @@ export default function HeroSection() {
             className="flex flex-wrap gap-4"
           >
             <Button
-              href="/solutions/project-administration"
+              href="/Oplossingen/project-administration"
               variant="gradient"
               size="lg"
             >

@@ -88,7 +88,7 @@ export default function Navbar() {
                           ? "text-white/90 hover:text-white"
                           : "text-slate-600 hover:text-slate-900"
                       } ${
-                        location.pathname.startsWith("/solutions")
+                        location.pathname.startsWith("/Oplossingen")
                           ? useTransparent
                             ? "text-white"
                             : "text-slate-900"
@@ -111,7 +111,7 @@ export default function Navbar() {
                       </svg>
                       <span
                         className={`absolute bottom-0 left-4 right-4 h-0.5 bg-indigo-600 transition-transform duration-200 origin-left ${
-                          location.pathname.startsWith("/solutions")
+                          location.pathname.startsWith("/Oplossingen")
                             ? "scale-x-100"
                             : "scale-x-0 group-hover:scale-x-100"
                         }`}
