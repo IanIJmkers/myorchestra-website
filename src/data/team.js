@@ -5,7 +5,7 @@ const members = [
     email: "r.bolle@orchestra-contact.com",
     phone: "06-52629099",
     linkedin: "https://www.linkedin.com/in/roderikbolle/",
-    photo: null,
+    photo: "/images/team/roderik-bolle.jpg",
   },
   {
     name: "Wouter Hofhuis",
@@ -13,7 +13,7 @@ const members = [
     email: "w.hofhuis@orchestra-contact.com",
     phone: "06-19408746",
     linkedin: "https://www.linkedin.com/in/wouter-hofhuis-59ab724",
-    photo: null,
+    photo: "/images/team/wouter-hofhuis.jpg",
   },
   {
     name: "Dave Price",
@@ -21,7 +21,7 @@ const members = [
     email: "d.price@orchestra-contact.com",
     phone: "070-2051182",
     linkedin: "https://www.linkedin.com/in/dave-price-cfa-a766153",
-    photo: null,
+    photo: "/images/team/dave-price.jpg",
   },
   {
     name: "Guus Drijver",
@@ -29,7 +29,7 @@ const members = [
     email: "g.drijver@orchestra-contact.com",
     phone: "06-52050536",
     linkedin: "https://www.linkedin.com/in/guusdrijver/",
-    photo: null,
+    photo: "/images/team/guus-drijver.jpg",
   },
   {
     name: "Tanja Haremaker",
@@ -37,7 +37,7 @@ const members = [
     email: "t.haremaker@orchestra-contact.com",
     phone: "06-51990527",
     linkedin: "https://www.linkedin.com/in/tanjaharemaker/",
-    photo: null,
+    photo: "/images/team/tanja-haremaker.jpg",
   },
   {
     name: "Pien Verweij",
@@ -45,14 +45,14 @@ const members = [
     email: "p.verweij@orchestra-contact.com",
     phone: "06-46761861",
     linkedin: "https://www.linkedin.com/in/pienverweij",
-    photo: null,
+    photo: "/images/team/pien-verweij.jpg",
   },
   {
     name: "Kilian van Buuren",
     role: "Accountmanager",
     email: "k.vanbuuren@orchestra-contact.com",
     phone: "070-2197212",
-    photo: null,
+    photo: "/images/team/kilian-van-buuren.jpg",
   },
   {
     name: "Arjan van Gulick",
@@ -60,7 +60,7 @@ const members = [
     email: "a.vangulick@orchestra-contact.com",
     phone: "070-2197210",
     linkedin: "https://www.linkedin.com/in/arjan-van-gulick-77273ab6",
-    photo: null,
+    photo: "/images/team/arjan-van-gulick.jpg",
   },
   {
     name: "Emma van Steijn",
@@ -68,7 +68,7 @@ const members = [
     email: "e.vansteijn@orchestra-contact.com",
     phone: "070-2051185",
     linkedin: "https://www.linkedin.com/in/emmavansteijn/",
-    photo: null,
+    photo: "/images/team/emma-van-steijn.jpg",
   },
   {
     name: "Kai van Kampen",
@@ -76,7 +76,7 @@ const members = [
     email: "k.vankampen@orchestra-contact.com",
     phone: "070-2051184",
     linkedin: "https://www.linkedin.com/in/kai-van-kampen-9126591a6/",
-    photo: null,
+    photo: "/images/team/kai-van-kampen.jpg",
   },
   {
     name: "Arvind Bisoen",
@@ -84,14 +84,14 @@ const members = [
     email: "a.bisoen@orchestra-contact.com",
     phone: "070-2197217",
     linkedin: "https://www.linkedin.com/in/arvindbisoen/",
-    photo: null,
+    photo: "/images/team/arvind-bisoen.jpg",
   },
   {
     name: "Christel Poorter",
     role: "HR & Administratie medewerker",
     email: "c.poorter@orchestra-contact.com",
     phone: "070-2051186",
-    photo: null,
+    photo: "/images/team/christel-poorter.jpg",
   },
   {
     name: "Caroline Groen-Bok",
@@ -99,7 +99,7 @@ const members = [
     email: "c.groen-bok@orchestra-contact.com",
     phone: "070-2051181",
     linkedin: "https://www.linkedin.com/in/caroline-groen-bok-a49aba12b",
-    photo: null,
+    photo: "/images/team/caroline-groen-bok.jpg",
   },
   {
     name: "Jordy Verkerk",
@@ -113,7 +113,7 @@ const members = [
     email: "i.ijmkers@orchestra-contact.com",
     phone: "070-2051185",
     linkedin: "https://www.linkedin.com/in/ian-ijmkers/",
-    photo: null,
+    photo: "/images/team/ian-ijmkers.jpg",
   },
   {
     name: "Emma de Nie",

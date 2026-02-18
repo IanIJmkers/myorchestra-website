@@ -23,9 +23,6 @@ export default function Footer() {
           {/* Company */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-linear-to-br from-indigo-500 to-teal-400 flex items-center justify-center">
-                <span className="text-white text-sm font-bold">M</span>
-              </div>
               <span className="text-xl font-heading font-bold text-white">
                 {siteMetadata.companyName}
               </span>

@@ -9,6 +9,7 @@ import SolutionDocumentVault from "../pages/SolutionDocumentVault";
 import OurClients from "../pages/OurClients";
 import AboutUs from "../pages/AboutUs";
 import Contact from "../pages/Contact";
+import MijnOrchestra from "../pages/MijnOrchestra";
 import NotFound from "../pages/NotFound";
 
 export const router = createBrowserRouter([
@@ -62,6 +63,11 @@ export const router = createBrowserRouter([
         path: "contact",
         element: <Contact />,
         handle: { title: "Contact" },
+      },
+      {
+        path: "mijn-orchestra",
+        element: <MijnOrchestra />,
+        handle: { title: "Mijn Orchestra" },
       },
     ],
   },

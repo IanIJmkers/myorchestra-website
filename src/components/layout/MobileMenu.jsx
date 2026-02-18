@@ -143,14 +143,13 @@ export default function MobileMenu({ open, onClose }) {
 
               {/* Login CTA */}
               <div className="mt-8">
-                <a
-                  href={siteMetadata.loginUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/mijn-orchestra"
+                  onClick={onClose}
                   className="block w-full text-center px-6 py-3 bg-linear-to-r from-indigo-600 to-teal-500 text-white text-sm font-semibold rounded-xl hover:from-indigo-500 hover:to-teal-400 transition-all"
                 >
                   Mijn Orchestra
-                </a>
+                </Link>
               </div>
             </nav>
           </motion.div>

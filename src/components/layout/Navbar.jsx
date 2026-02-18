@@ -34,9 +34,6 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-linear-to-br from-indigo-600 to-teal-500 flex items-center justify-center">
-                <span className="text-white text-sm font-bold">M</span>
-              </div>
               <span
                 className={`text-xl font-heading font-bold ${
                   useTransparent ? "text-white" : "text-slate-900"
@@ -131,14 +128,12 @@ export default function Navbar() {
 
             {/* Right side */}
             <div className="hidden lg:flex items-center gap-3">
-              <a
-                href={siteMetadata.loginUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/mijn-orchestra"
                 className="px-5 py-2.5 text-sm font-semibold bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 transition-colors duration-200"
               >
                 Mijn Orchestra
-              </a>
+              </Link>
             </div>
 
             {/* Mobile hamburger */}
