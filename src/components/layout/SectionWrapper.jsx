@@ -1,8 +1,8 @@
 const bgColors = {
   white: "bg-white",
   surface: "bg-surface",
-  dark: "bg-indigo-950",
-  gradient: "bg-linear-to-br from-indigo-950 via-indigo-900 to-indigo-800",
+  dark: "bg-indigo-50",
+  gradient: "bg-indigo-50",
 };
 
 const paddings = {

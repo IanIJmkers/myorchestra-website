@@ -9,15 +9,15 @@ export default function CTASection({
   return (
     <SectionWrapper bg="gradient">
       <AnimatedSection className="text-center max-w-2xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-white mb-6">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-slate-900 mb-6">
           {title}
         </h2>
-        <p className="text-lg text-indigo-200 mb-10">{subtitle}</p>
+        <p className="text-lg text-slate-500 mb-10">{subtitle}</p>
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Button href="/contact" variant="gradient" size="lg">
             Neem Contact Op
           </Button>
-          <Button href="/about" variant="outline-light" size="lg">
+          <Button href="/about" variant="outline" size="lg">
             Over MyOrchestra
           </Button>
         </div>

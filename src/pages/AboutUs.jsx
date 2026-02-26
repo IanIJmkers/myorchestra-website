@@ -44,15 +44,15 @@ export default function AboutUs() {
   return (
     <PageTransition>
       {/* Hero */}
-      <section className="relative pt-32 pb-20 bg-linear-to-br from-indigo-950 via-indigo-900 to-indigo-800 overflow-hidden">
-        <div className="absolute top-0 right-0 w-100 h-100 bg-teal-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-75 h-75 bg-indigo-500/15 rounded-full blur-3xl" />
+      <section className="relative pt-32 pb-20 bg-white overflow-hidden">
+        <div className="absolute top-0 right-0 w-100 h-100 bg-indigo-100/60 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-75 h-75 bg-teal-100/40 rounded-full blur-3xl" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="inline-block text-xs font-body font-semibold tracking-wide uppercase bg-white/10 text-teal-300 px-4 py-1.5 rounded-full backdrop-blur-sm mb-6"
+            className="inline-block text-xs font-body font-semibold tracking-wide uppercase bg-indigo-50 text-indigo-600 px-4 py-1.5 rounded-full mb-6"
           >
             Over Ons
           </motion.span>
@@ -60,7 +60,7 @@ export default function AboutUs() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white mb-6"
+            className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-slate-900 mb-6"
           >
             De kracht achter MyOrchestra
           </motion.h1>
@@ -68,7 +68,7 @@ export default function AboutUs() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg text-indigo-200 max-w-2xl"
+            className="text-lg text-slate-500 max-w-2xl"
           >
             {siteMetadata.companyName} is onderdeel van Orchestra en biedt al
             meer dan 10 jaar de enige online kantooromgeving specifiek ontwikkeld
@@ -186,8 +186,8 @@ export default function AboutUs() {
                   />
                 </div>
               ) : (
-                <div className="w-32 h-32 rounded-full bg-indigo-950 flex items-center justify-center mx-auto group-hover:bg-indigo-900 transition-colors duration-300">
-                  <span className="text-3xl font-heading text-teal-400">
+                <div className="w-32 h-32 rounded-full bg-indigo-100 flex items-center justify-center mx-auto group-hover:bg-indigo-200 transition-colors duration-300">
+                  <span className="text-3xl font-heading text-indigo-600">
                     {getInitials(member.name)}
                   </span>
                 </div>

@@ -119,6 +119,7 @@ const members = [
     name: "Emma de Nie",
     role: "Backend Developer",
     email: "e.denie@orchestra-contact.com",
+    linkedin: "https://www.linkedin.com/in/emmadenie/",
     photo: null,
   },
   {

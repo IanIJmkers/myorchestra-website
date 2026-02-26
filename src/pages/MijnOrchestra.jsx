@@ -194,6 +194,47 @@ function ModuleHeading({ icon, title }) {
   );
 }
 
+/* ─── Shared: Monthly Bar Chart ─── */
+function MonthlyBarChart({ months, giften, leningen, title, subtitle }) {
+  const maxVal = Math.max(...giften, ...leningen, 1);
+  const barH = 130;
+  return (
+    <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden">
+      <div className="px-4 py-2.5 border-b border-slate-100 flex items-center justify-between">
+        <h4 className="text-sm font-semibold text-slate-900">{title}</h4>
+        {subtitle && <span className="text-[10px] text-slate-400">{subtitle}</span>}
+      </div>
+      <div className="p-4">
+        <div className="flex items-center gap-4 mb-3">
+          <div className="flex items-center gap-1.5 text-[10px] text-slate-500">
+            <span className="w-3 h-3 rounded-sm bg-indigo-950" /> Giften ({subtitle || "2023"})
+          </div>
+          <div className="flex items-center gap-1.5 text-[10px] text-slate-500">
+            <span className="w-3 h-3 rounded-sm bg-teal-500" /> Leningen ({subtitle || "2023"})
+          </div>
+        </div>
+        <svg viewBox="0 0 480 160" className="w-full h-40" preserveAspectRatio="xMidYMid meet">
+          {[0, 0.25, 0.5, 0.75, 1].map((pct) => (
+            <line key={pct} x1="20" y1={barH * (1 - pct) + 10} x2="476" y2={barH * (1 - pct) + 10} stroke="#e2e8f0" strokeWidth="0.5" />
+          ))}
+          {months.map((month, i) => {
+            const gH = (giften[i] / maxVal) * barH;
+            const lH = (leningen[i] / maxVal) * barH;
+            const x = 20 + i * 38;
+            return (
+              <g key={month}>
+                <rect x={x} y={barH - gH + 10} width={14} height={Math.max(gH, 0)} fill="#1e1b4b" rx={2} />
+                <rect x={x + 16} y={barH - lH + 10} width={14} height={Math.max(lH, 0)} fill="#14b8a6" rx={2} />
+                <text x={x + 15} y={155} textAnchor="middle" fontSize="8" fill="#94a3b8">{month}</text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Overzicht ─── */
 function OverzichtContent() {
   return (
@@ -208,8 +249,47 @@ function OverzichtContent() {
   );
 }
 
-/* ─── Rapporten: Balance Sheet ─── */
+/* ─── Rapporten: Balance Sheet with expandable rows ─── */
 function RapportenContent() {
+  const [expandedRows, setExpandedRows] = useState({});
+  const toggleRow = (label) =>
+    setExpandedRows((prev) => ({ ...prev, [label]: !prev[label] }));
+
+  const renderRows = (rows) =>
+    rows.flatMap((row) => [
+      <tr
+        key={row.label}
+        className="border-b border-slate-50 hover:bg-slate-50/50 cursor-pointer"
+        onClick={() => row.children && toggleRow(row.label)}
+      >
+        <td className="px-4 py-1.5 text-slate-500 pl-8 flex items-center gap-1.5">
+          {row.children && (
+            <svg
+              className={`w-3 h-3 text-slate-400 shrink-0 transition-transform duration-150 ${expandedRows[row.label] ? "rotate-90" : ""}`}
+              fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          )}
+          {!row.children && <span className="w-3" />}
+          {row.label}
+        </td>
+        {row.values.map((v, i) => (
+          <td key={i} className="px-4 py-1.5 text-right text-slate-600 tabular-nums">{v}</td>
+        ))}
+      </tr>,
+      ...(expandedRows[row.label] && row.children
+        ? row.children.map((child) => (
+            <tr key={child.label} className="border-b border-slate-50 bg-slate-50/30">
+              <td className="px-4 py-1 text-slate-400 pl-14 text-[11px]">{child.label}</td>
+              {child.values.map((v, i) => (
+                <td key={i} className="px-4 py-1 text-right text-slate-400 tabular-nums text-[11px]">{v}</td>
+              ))}
+            </tr>
+          ))
+        : []),
+    ]);
+
   return (
     <>
       <ModuleHeading icon="reports" title="Rapporten" />
@@ -229,14 +309,7 @@ function RapportenContent() {
             </thead>
             <tbody>
               <tr><td colSpan={3} className="px-4 pt-3 pb-1 font-semibold text-slate-900">Activa</td></tr>
-              {balansData.activa.map((row) => (
-                <tr key={row.label} className="border-b border-slate-50 hover:bg-slate-50/50">
-                  <td className="px-4 py-1.5 text-slate-500 pl-8">{row.label}</td>
-                  {row.values.map((v, i) => (
-                    <td key={i} className="px-4 py-1.5 text-right text-slate-600 tabular-nums">{v}</td>
-                  ))}
-                </tr>
-              ))}
+              {renderRows(balansData.activa)}
               <tr className="border-t border-slate-200 font-semibold">
                 <td className="px-4 py-2 text-slate-900">Totaal activa</td>
                 {balansData.activaTotal.map((v, i) => (
@@ -244,14 +317,7 @@ function RapportenContent() {
                 ))}
               </tr>
               <tr><td colSpan={3} className="px-4 pt-4 pb-1 font-semibold text-slate-900">Passiva</td></tr>
-              {balansData.passiva.map((row) => (
-                <tr key={row.label} className="border-b border-slate-50 hover:bg-slate-50/50">
-                  <td className="px-4 py-1.5 text-slate-500 pl-8">{row.label}</td>
-                  {row.values.map((v, i) => (
-                    <td key={i} className="px-4 py-1.5 text-right text-slate-600 tabular-nums">{v}</td>
-                  ))}
-                </tr>
-              ))}
+              {renderRows(balansData.passiva)}
               <tr className="border-t border-slate-200 font-semibold">
                 <td className="px-4 py-2 text-slate-900">Totaal passiva</td>
                 {balansData.passivaTotal.map((v, i) => (
@@ -271,52 +337,37 @@ function BoekhoudingContent() {
   return (
     <>
       <ModuleHeading icon="accounting" title="Boekhouding" />
-
-      {/* Page title */}
       <div className="flex items-center gap-2 mb-3">
         <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
         </svg>
         <h4 className="text-sm font-semibold text-slate-900">Journaalpost {journaalpostData.id}</h4>
+        <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-semibold bg-green-50 text-green-700">
+          {journaalpostData.status}
+        </span>
       </div>
-
-      {/* Tabs */}
       <div className="flex gap-4 mb-4 border-b border-slate-200">
         {journaalpostData.tabs.map((tab, i) => (
-          <span
-            key={tab}
-            className={`text-xs pb-2 cursor-pointer ${
-              i === 0
-                ? "font-medium text-slate-900 border-b-2 border-indigo-600 -mb-px"
-                : "text-slate-400 hover:text-slate-600"
-            }`}
-          >
-            {tab}
-          </span>
+          <span key={tab} className={`text-xs pb-2 cursor-pointer ${i === 0 ? "font-medium text-slate-900 border-b-2 border-indigo-600 -mb-px" : "text-slate-400 hover:text-slate-600"}`}>{tab}</span>
         ))}
       </div>
-
-      {/* Details panel */}
       <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden mb-4">
-        <div className="p-4 space-y-2.5">
+        <div className="bg-indigo-950 px-4 py-2.5">
+          <h4 className="text-sm font-semibold text-white">Details</h4>
+        </div>
+        <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5">
           {journaalpostData.details.map((field) => (
-            <div key={field.label} className="flex text-xs gap-4">
+            <div key={field.label} className="flex text-xs gap-3">
               <span className="text-slate-900 font-semibold w-28 shrink-0">{field.label}</span>
-              <span className={field.isLink ? "text-blue-600" : "text-slate-600"}>
-                {field.value || ""}
-              </span>
+              <span className={field.isLink ? "text-blue-600" : "text-slate-600"}>{field.value || "\u2014"}</span>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Items table */}
       <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden mb-4">
         <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
           <h4 className="text-sm font-semibold text-slate-900">Items</h4>
-          <span className="text-[10px] text-slate-400">
-            1-{journaalpostData.items.length} &nbsp; {journaalpostData.items.length}
-          </span>
+          <span className="text-[10px] text-slate-400">1-{journaalpostData.items.length} &nbsp; {journaalpostData.items.length}</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
@@ -330,57 +381,71 @@ function BoekhoudingContent() {
             <tbody>
               {journaalpostData.items.map((item, i) => (
                 <tr key={i} className="border-b border-slate-50 hover:bg-slate-50/50">
-                  <td className="px-3 py-2">
-                    <span className="text-blue-600">{item.grootboekrekening}</span>
-                    <span className="text-slate-400 ml-1 block text-[10px]">{item.code}</span>
-                  </td>
-                  <td className="px-3 py-2 text-right text-slate-600 tabular-nums whitespace-nowrap">
-                    &euro; {item.bedrag}
-                  </td>
+                  <td className="px-3 py-2"><span className="text-blue-600">{item.grootboekrekening}</span><span className="text-slate-400 ml-1 block text-[10px]">{item.code}</span></td>
+                  <td className="px-3 py-2 text-right text-slate-600 tabular-nums whitespace-nowrap">&euro; {item.bedrag}</td>
                   <td className="px-3 py-2 text-slate-500">{item.kostenplaats || ""}</td>
                 </tr>
               ))}
             </tbody>
+            <tfoot>
+              <tr className="border-t border-slate-200 bg-slate-50">
+                <td className="px-3 py-2 text-slate-900 font-semibold">Totaal</td>
+                <td className="px-3 py-2 text-right text-slate-900 font-semibold tabular-nums whitespace-nowrap">&euro; 0,00</td>
+                <td className="px-3 py-2" />
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>
-
-      {/* Referenties */}
       <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden mb-4">
         <div className="px-3 py-2 border-b border-slate-100">
-          <h4 className="text-sm font-semibold text-slate-900">
-            Referenties ({journaalpostData.referenties.length})
-          </h4>
+          <h4 className="text-sm font-semibold text-slate-900">Referenties ({journaalpostData.referenties.length})</h4>
         </div>
         <div className="p-3 space-y-2">
           {journaalpostData.referenties.map((ref, i) => (
-            <div key={i} className="flex items-center gap-3 text-xs">
-              <span className="inline-block px-2.5 py-1 rounded text-[10px] font-semibold bg-slate-100 text-slate-500 uppercase tracking-wide">
-                {ref.type}
+            <div key={i} className="flex items-start gap-3 text-xs p-2.5 rounded-md bg-slate-50/50 border border-slate-100">
+              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-indigo-950/10 text-slate-700 shrink-0">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
               </span>
               <div className="grow">
-                <span className="text-blue-600 font-medium">{ref.label}</span>
-                <div className="text-[10px] text-slate-400">{ref.relatie} &nbsp;&nbsp;&bull;&nbsp;&nbsp; &euro; {ref.bedrag}</div>
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="inline-block px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 uppercase tracking-wide">{ref.type}</span>
+                  <span className="text-blue-600 font-medium">{ref.label}</span>
+                </div>
+                <div className="text-[10px] text-slate-400">{ref.relatie} &nbsp;&bull;&nbsp; &euro; {ref.bedrag}</div>
               </div>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Documenten (empty) */}
       <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden">
         <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
           <h4 className="text-sm font-semibold text-slate-900">Documenten</h4>
-          <span className="text-[10px] text-slate-400">1-0 &nbsp; 0</span>
+          <span className="text-[10px] text-slate-400">1-{journaalpostData.documenten.length} &nbsp; {journaalpostData.documenten.length}</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="text-left px-3 py-2 text-slate-500 font-medium">Document</th>
+                <th className="text-left px-3 py-2 text-slate-500 font-medium">Datum</th>
+                <th className="text-right px-3 py-2 text-slate-500 font-medium">Grootte</th>
               </tr>
             </thead>
-            <tbody />
+            <tbody>
+              {journaalpostData.documenten.map((doc, i) => (
+                <tr key={i} className="border-b border-slate-50 hover:bg-slate-50/50">
+                  <td className="px-3 py-2 flex items-center gap-2">
+                    <svg className="w-4 h-4 text-red-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" /></svg>
+                    <span className="text-blue-600">{doc.naam}</span>
+                  </td>
+                  <td className="px-3 py-2 text-slate-500">{doc.datum}</td>
+                  <td className="px-3 py-2 text-right text-slate-400">{doc.grootte}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </div>
@@ -393,48 +458,25 @@ function BankzakenContent() {
   return (
     <>
       <ModuleHeading icon="banking" title="Bankzaken" />
-
-      {/* Tabs */}
       <div className="flex gap-4 mb-4 border-b border-slate-200">
         {bankTransactiesData.tabs.map((tab, i) => (
-          <span
-            key={tab}
-            className={`text-xs pb-2 cursor-pointer ${
-              i === 0
-                ? "font-medium text-slate-900 border-b-2 border-indigo-600 -mb-px"
-                : "text-slate-400 hover:text-slate-600"
-            }`}
-          >
-            {tab}
-          </span>
+          <span key={tab} className={`text-xs pb-2 cursor-pointer ${i === 0 ? "font-medium text-slate-900 border-b-2 border-indigo-600 -mb-px" : "text-slate-400 hover:text-slate-600"}`}>{tab}</span>
         ))}
       </div>
-
-      {/* Toolbar */}
       <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-        <span className="text-[10px] text-slate-400">
-          1-50 &nbsp; {bankTransactiesData.totalRows}
-        </span>
+        <span className="text-[10px] text-slate-400">1-50 &nbsp; {bankTransactiesData.totalRows}</span>
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-medium bg-green-50 text-green-700 cursor-default">
             Keur goed
-            <span className="inline-flex items-center justify-center min-w-4.5 h-4.5 rounded-full bg-teal-500 text-white text-[9px] font-bold px-1">
-              {bankTransactiesData.approveCount}
-            </span>
+            <span className="inline-flex items-center justify-center min-w-4.5 h-4.5 rounded-full bg-teal-500 text-white text-[9px] font-bold px-1">{bankTransactiesData.approveCount}</span>
           </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-medium bg-red-50 text-red-700 cursor-default">
             Wijs af
-            <span className="inline-flex items-center justify-center min-w-4.5 h-4.5 rounded-full bg-teal-500 text-white text-[9px] font-bold px-1">
-              {bankTransactiesData.rejectCount}
-            </span>
+            <span className="inline-flex items-center justify-center min-w-4.5 h-4.5 rounded-full bg-teal-500 text-white text-[9px] font-bold px-1">{bankTransactiesData.rejectCount}</span>
           </span>
-          <span className="px-3 py-1.5 rounded text-[11px] font-medium bg-slate-100 text-slate-500 cursor-default">
-            Beoordeel
-          </span>
+          <span className="px-3 py-1.5 rounded text-[11px] font-medium bg-slate-100 text-slate-500 cursor-default">Beoordeel</span>
         </div>
       </div>
-
-      {/* Transaction table */}
       <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-xs min-w-300">
@@ -450,46 +492,15 @@ function BankzakenContent() {
                 <tr key={row.id} className="border-b border-slate-50 hover:bg-slate-50/50">
                   <td className="px-3 py-2 text-slate-400">{row.id}</td>
                   <td className="px-3 py-2 text-slate-500 whitespace-nowrap">{row.datum}</td>
-                  <td className="px-3 py-2">
-                    <div className="text-slate-700 font-medium whitespace-nowrap">{row.tegenrekeningNaam}</div>
-                    <div className="text-[10px] text-slate-400">{row.tegenrekeningIban}</div>
-                  </td>
-                  <td className="px-3 py-2 text-slate-600 tabular-nums whitespace-nowrap">
-                    &euro; &nbsp; {row.bedrag}
-                  </td>
-                  <td className="px-3 py-2">
-                    {row.herkomst ? (
-                      <div>
-                        <div className="text-blue-600 text-[10px] font-medium">
-                          {row.herkomst.ref}: {row.herkomst.label || (row.herkomst.type === "toekenning" ? "Toekenning" : "Lening")}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {row.herkomst.relatie} &nbsp;&nbsp;&bull;&nbsp;&nbsp; &euro; {row.herkomst.bedrag}
-                        </div>
-                      </div>
-                    ) : ""}
-                  </td>
-                  <td className="px-3 py-2 text-center">
-                    {row.oordeel === "approved" ? (
-                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-green-100">
-                        <svg className="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                        </svg>
-                      </span>
-                    ) : ""}
-                  </td>
+                  <td className="px-3 py-2"><div className="text-slate-700 font-medium whitespace-nowrap">{row.tegenrekeningNaam}</div><div className="text-[10px] text-slate-400">{row.tegenrekeningIban}</div></td>
+                  <td className="px-3 py-2 text-slate-600 tabular-nums whitespace-nowrap">&euro; &nbsp; {row.bedrag}</td>
+                  <td className="px-3 py-2">{row.herkomst ? (<div><div className="text-blue-600 text-[10px] font-medium">{row.herkomst.ref}: {row.herkomst.label || (row.herkomst.type === "toekenning" ? "Toekenning" : "Lening")}</div><div className="text-[10px] text-slate-400">{row.herkomst.relatie} &nbsp;&nbsp;&bull;&nbsp;&nbsp; &euro; {row.herkomst.bedrag}</div></div>) : ""}</td>
+                  <td className="px-3 py-2 text-center">{row.oordeel === "approved" ? (<span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-green-100"><svg className="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg></span>) : ""}</td>
                   <td className="px-3 py-2 text-[10px] text-slate-500 whitespace-pre-line">{row.beoordelingen}</td>
                   <td className="px-3 py-2 text-slate-500 whitespace-nowrap">{row.omschrijving}</td>
                   <td className="px-3 py-2 text-slate-500 whitespace-nowrap">{row.betalingskenmerk || ""}</td>
-                  <td className="px-3 py-2">
-                    <div className="text-slate-500 whitespace-nowrap">{row.bankrekening.naam}</div>
-                    <div className="text-[10px] text-slate-400 whitespace-nowrap">{row.bankrekening.iban}</div>
-                  </td>
-                  <td className="px-3 py-2 text-slate-500 whitespace-nowrap">
-                    {row.document ? (
-                      <span className="text-blue-600 text-[10px]">{row.document}</span>
-                    ) : ""}
-                  </td>
+                  <td className="px-3 py-2"><div className="text-slate-500 whitespace-nowrap">{row.bankrekening.naam}</div><div className="text-[10px] text-slate-400 whitespace-nowrap">{row.bankrekening.iban}</div></td>
+                  <td className="px-3 py-2 text-slate-500 whitespace-nowrap">{row.document ? (<span className="text-blue-600 text-[10px]">{row.document}</span>) : ""}</td>
                 </tr>
               ))}
             </tbody>
@@ -500,36 +511,20 @@ function BankzakenContent() {
   );
 }
 
-/* ─── Projecten: Chart + Budget ─── */
+/* ─── Projecten: Chart + Budget + Bar Chart + Table ─── */
 function ProjectenContent() {
-  const { chartCategories, budget, toegekend, resterend, dateRange } = projectenData;
-
+  const { chartCategories, budget, toegekend, resterend, dateRange, monthlyChart, aanvragenTable } = projectenData;
   return (
     <>
       <ModuleHeading icon="projects" title="Projecten" />
       <div className="flex items-center gap-3 mb-4">
-        <div className="bg-white border border-slate-200 rounded-md px-3 py-1.5 text-xs text-slate-500">
-          {dateRange}
-        </div>
+        <div className="bg-white border border-slate-200 rounded-md px-3 py-1.5 text-xs text-slate-500">{dateRange}</div>
       </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-        {/* Donut chart card */}
         <div className="lg:col-span-3 bg-white rounded-xl border border-slate-200/60 shadow-card p-5">
           <h4 className="text-sm font-semibold text-slate-900 mb-4">Verdeling toekenningen</h4>
           <div className="flex items-center gap-8">
-            <div
-              className="w-32 h-32 rounded-full shrink-0"
-              style={{
-                background: `conic-gradient(${chartCategories
-                  .reduce((acc, cat, i) => {
-                    const start = chartCategories.slice(0, i).reduce((s, c) => s + c.percentage, 0);
-                    return `${acc}${i > 0 ? ", " : ""}${cat.color} ${start}% ${start + cat.percentage}%`;
-                  }, "")})`,
-                mask: "radial-gradient(circle at center, transparent 38%, black 39%)",
-                WebkitMask: "radial-gradient(circle at center, transparent 38%, black 39%)",
-              }}
-            />
+            <div className="w-32 h-32 rounded-full shrink-0" style={{ background: `conic-gradient(${chartCategories.reduce((acc, cat, i) => { const start = chartCategories.slice(0, i).reduce((s, c) => s + c.percentage, 0); return `${acc}${i > 0 ? ", " : ""}${cat.color} ${start}% ${start + cat.percentage}%`; }, "")})`, mask: "radial-gradient(circle at center, transparent 38%, black 39%)", WebkitMask: "radial-gradient(circle at center, transparent 38%, black 39%)" }} />
             <div className="space-y-2">
               {chartCategories.map((cat) => (
                 <div key={cat.label} className="flex items-center gap-2 text-xs">
@@ -540,16 +535,10 @@ function ProjectenContent() {
             </div>
           </div>
         </div>
-
-        {/* Budget insight card */}
         <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200/60 shadow-card p-5">
           <h4 className="text-sm font-semibold text-slate-900 mb-4">Budget inzicht</h4>
           <div className="space-y-3">
-            {[
-              { label: "Budget", value: budget },
-              { label: "Toegekend", value: toegekend },
-              { label: "Resterend", value: resterend },
-            ].map((row) => (
+            {[{ label: "Budget", value: budget }, { label: "Toegekend", value: toegekend }, { label: "Resterend", value: resterend }].map((row) => (
               <div key={row.label} className="flex justify-between items-center">
                 <span className="text-xs text-slate-500">{row.label}</span>
                 <span className="text-sm font-semibold tabular-nums text-slate-900">{row.value}</span>
@@ -562,59 +551,78 @@ function ProjectenContent() {
           <p className="text-[10px] text-slate-400 mt-1">1,15% van budget toegekend</p>
         </div>
       </div>
+      <div className="mt-4">
+        <MonthlyBarChart months={monthlyChart.months} giften={monthlyChart.giften} leningen={monthlyChart.leningen} title="Maandelijkse verdeling toekenningen" subtitle={dateRange} />
+      </div>
+      <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden mt-4">
+        <div className="px-4 py-2.5 border-b border-slate-100">
+          <h4 className="text-sm font-semibold text-slate-900">Toekenningen ({aanvragenTable.length})</h4>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                {["Aanvraagnummer", "Aanvrager", "Categorie", "Gift", "Lening", "Status", "Datum"].map((col) => (
+                  <th key={col} className="text-left px-3 py-2 text-slate-500 font-medium whitespace-nowrap">{col}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {aanvragenTable.map((row) => (
+                <tr key={row.nummer} className="border-b border-slate-50 hover:bg-slate-50/50">
+                  <td className="px-3 py-2 text-blue-600 font-medium">{row.nummer}</td>
+                  <td className="px-3 py-2 text-slate-700 font-medium">{row.aanvrager}</td>
+                  <td className="px-3 py-2 text-slate-500">{row.categorie}</td>
+                  <td className="px-3 py-2 text-slate-600 tabular-nums whitespace-nowrap">&euro; {row.gift}</td>
+                  <td className="px-3 py-2 text-slate-600 tabular-nums whitespace-nowrap">&euro; {row.lening}</td>
+                  <td className="px-3 py-2"><span className="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-green-50 text-green-700">{row.status}</span></td>
+                  <td className="px-3 py-2 text-slate-500">{row.datum}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </>
   );
 }
 
-/* ─── Facturatie: Invoice Detail ─── */
+/* ─── Facturatie: Invoice Detail + Referenties + Opmerkingen ─── */
 function FacturatieContent() {
-  const { fields, invoicePreview } = factuurData;
-
+  const { fields, invoicePreview, referenties, opmerkingen } = factuurData;
   return (
     <>
       <ModuleHeading icon="invoicing" title="Facturatie" />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Invoice details */}
         <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden">
-          <div className="bg-indigo-950 px-4 py-2.5">
-            <h4 className="text-sm font-semibold text-white">Details</h4>
-          </div>
+          <div className="bg-indigo-950 px-4 py-2.5"><h4 className="text-sm font-semibold text-white">Details</h4></div>
           <div className="p-4 space-y-2.5">
-            {fields.map((field) => (
-              <div key={field.label} className="flex justify-between text-xs gap-4">
-                <span className="text-slate-400 shrink-0">{field.label}</span>
-                <span className="text-slate-600 font-medium text-right">{field.value}</span>
+            {fields.map((field, idx) => (
+              <div key={field.label}>
+                {idx === fields.length - 1 && <div className="border-t border-slate-100 mb-2.5" />}
+                <div className="flex justify-between text-xs gap-4">
+                  <span className="text-slate-400 shrink-0">{field.label}</span>
+                  <span className={`font-medium text-right ${field.label === "Geautoriseerd" ? "text-green-700" : "text-slate-600"}`}>{field.value}</span>
+                </div>
               </div>
             ))}
           </div>
         </div>
-
-        {/* Invoice preview */}
         <div className="bg-white rounded-xl border border-slate-200/60 shadow-card p-4">
           <div className="border border-slate-200 rounded p-4 h-full bg-white">
-            {/* Invoice header */}
             <div className="flex justify-between items-start mb-4">
-              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
-                <span className="text-[8px] font-bold text-red-600">Logo</span>
-              </div>
+              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center"><span className="text-[8px] font-bold text-red-600">Logo</span></div>
               <div className="text-right">
                 <p className="text-xs font-semibold text-slate-900">{invoicePreview.company}</p>
                 <p className="text-[9px] text-slate-400">{invoicePreview.address}</p>
                 <p className="text-[9px] text-slate-400">{invoicePreview.phone}</p>
               </div>
             </div>
-
-            <div className="text-center mb-3">
-              <span className="text-lg font-bold text-red-600">Factuur</span>
-            </div>
-
-            {/* To + meta */}
+            <div className="text-center mb-3"><span className="text-lg font-bold text-red-600">Factuur</span></div>
             <div className="flex justify-between text-[9px] text-slate-500 mb-3">
               <div>
                 <p className="font-medium text-slate-600 mb-0.5">Naar</p>
-                {invoicePreview.to.split("\n").map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
+                {invoicePreview.to.split("\n").map((line, i) => (<p key={i}>{line}</p>))}
               </div>
               <div className="text-right space-y-0.5">
                 <p><span className="text-slate-400">Factuurnummer</span> {invoicePreview.number}</p>
@@ -622,8 +630,6 @@ function FacturatieContent() {
                 <p><span className="text-slate-400">Vervaldag</span> {invoicePreview.date}</p>
               </div>
             </div>
-
-            {/* Line items */}
             <table className="w-full text-[9px] mb-3">
               <thead>
                 <tr className="border-b border-slate-200">
@@ -646,7 +652,6 @@ function FacturatieContent() {
                 ))}
               </tbody>
             </table>
-
             <div className="flex justify-end">
               <div className="text-right">
                 <span className="text-xs font-semibold text-red-600">Totaalbedrag </span>
@@ -654,6 +659,39 @@ function FacturatieContent() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden mt-4">
+        <div className="px-4 py-2.5 border-b border-slate-100"><h4 className="text-sm font-semibold text-slate-900">Referenties ({referenties.length})</h4></div>
+        <div className="p-4 space-y-3">
+          {referenties.map((ref, i) => (
+            <div key={i} className="flex items-center gap-4 text-xs">
+              <span className="text-slate-900 font-semibold w-36 shrink-0 uppercase text-[10px] tracking-wide">{ref.type}</span>
+              <span className="text-blue-600 font-medium">{ref.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden mt-4">
+        <div className="px-4 py-2.5 border-b border-slate-100 flex items-center justify-between">
+          <h4 className="text-sm font-semibold text-slate-900">Opmerkingen</h4>
+          <span className="text-[10px] text-slate-400">1-0 van 0</span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                {["Afgehandeld", "Opmerking", "Laatst gewijzigd"].map((col) => (
+                  <th key={col} className="text-left px-3 py-2 text-slate-500 font-medium whitespace-nowrap">{col}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {opmerkingen.length === 0 && (
+                <tr><td colSpan={3} className="px-3 py-4 text-center text-slate-400 text-[11px]">Geen opmerkingen</td></tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </>
@@ -665,12 +703,9 @@ function RelatiesContent() {
   return (
     <>
       <ModuleHeading icon="relations" title="Relaties" />
-      {/* Filter bar */}
       <div className="flex flex-wrap gap-2 mb-4">
         {["Klanten", "Leveranciers", "Donateurs", "Projectrelaties", "Personeel"].map((filter) => (
-          <span key={filter} className="px-3 py-1 rounded-full text-[10px] font-medium bg-slate-100 text-slate-500 cursor-pointer hover:bg-slate-200 transition-colors">
-            {filter}
-          </span>
+          <span key={filter} className="px-3 py-1 rounded-full text-[10px] font-medium bg-slate-100 text-slate-500 cursor-pointer hover:bg-slate-200 transition-colors">{filter}</span>
         ))}
       </div>
       <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden">
@@ -699,17 +734,13 @@ function RelatiesContent() {
                   <td className="px-3 py-2 text-slate-500">{row.plaats || "-"}</td>
                   <td className="px-3 py-2 text-slate-500 whitespace-nowrap">{row.telefoon}</td>
                   <td className="px-3 py-2 text-slate-500 whitespace-nowrap">{row.email}</td>
-                  <td className="px-3 py-2">
-                    <span className="inline-flex items-center justify-center w-4 h-4 text-green-600">✓</span>
-                  </td>
+                  <td className="px-3 py-2"><span className="inline-flex items-center justify-center w-4 h-4 text-green-600">✓</span></td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <div className="px-3 py-2 text-[10px] text-slate-400 border-t border-slate-100">
-          1 – {relatiesData.length} van 112
-        </div>
+        <div className="px-3 py-2 text-[10px] text-slate-400 border-t border-slate-100">1 – {relatiesData.length} van 112</div>
       </div>
     </>
   );
@@ -721,28 +752,18 @@ function DonatiesContent() {
   const max = Math.max(...chartValues);
   const chartW = 100;
   const chartH = 50;
-  const points = chartValues
-    .map((v, i) => `${(i / (chartValues.length - 1)) * chartW},${chartH - (v / max) * chartH}`)
-    .join(" ");
+  const points = chartValues.map((v, i) => `${(i / (chartValues.length - 1)) * chartW},${chartH - (v / max) * chartH}`).join(" ");
   const areaPoints = `0,${chartH} ${points} ${chartW},${chartH}`;
-
   return (
     <>
       <ModuleHeading icon="donations" title="Donaties" />
-
-      {/* Tabs */}
       <div className="flex gap-4 mb-4 border-b border-slate-200">
         <span className="text-xs font-medium text-slate-900 pb-2 border-b-2 border-indigo-600 -mb-px">Cumulatief maandelijks gedoneerd bedrag</span>
         <span className="text-xs text-slate-400 pb-2 cursor-pointer hover:text-slate-600">Donaties per oormerk</span>
       </div>
-
-      {/* Area chart */}
       <div className="bg-white rounded-xl border border-slate-200/60 shadow-card p-4 mb-4">
         <svg viewBox={`-2 -2 ${chartW + 4} ${chartH + 14}`} className="w-full h-36" preserveAspectRatio="none">
-          {/* Grid lines */}
-          {[0, 0.25, 0.5, 0.75, 1].map((pct) => (
-            <line key={pct} x1="0" y1={chartH * (1 - pct)} x2={chartW} y2={chartH * (1 - pct)} stroke="#e2e8f0" strokeWidth="0.2" />
-          ))}
+          {[0, 0.25, 0.5, 0.75, 1].map((pct) => (<line key={pct} x1="0" y1={chartH * (1 - pct)} x2={chartW} y2={chartH * (1 - pct)} stroke="#e2e8f0" strokeWidth="0.2" />))}
           <polygon points={areaPoints} fill="rgba(30, 98, 208, 0.1)" />
           <polyline points={points} fill="none" stroke="#1E62D0" strokeWidth="0.6" />
         </svg>
@@ -751,12 +772,8 @@ function DonatiesContent() {
         </div>
         <p className="text-center text-[9px] text-slate-400 mt-1">Maand</p>
       </div>
-
-      {/* Donations table */}
       <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden">
-        <div className="px-4 py-2.5 border-b border-slate-100">
-          <h4 className="text-sm font-semibold text-slate-900">Alle donaties</h4>
-        </div>
+        <div className="px-4 py-2.5 border-b border-slate-100"><h4 className="text-sm font-semibold text-slate-900">Alle donaties</h4></div>
         <div className="overflow-x-auto">
           <table className="w-full text-xs min-w-162.5">
             <thead>
@@ -782,9 +799,7 @@ function DonatiesContent() {
             </tbody>
           </table>
         </div>
-        <div className="px-4 py-2 text-xs text-slate-500 border-t border-slate-100 text-right tabular-nums">
-          {totaal}
-        </div>
+        <div className="px-4 py-2 text-xs text-slate-500 border-t border-slate-100 text-right tabular-nums">{totaal}</div>
       </div>
     </>
   );
@@ -797,7 +812,6 @@ function DocumentenContent() {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)} MB`;
     return `${(num / 1000).toFixed(0)} KB`;
   }
-
   return (
     <>
       <ModuleHeading icon="documents" title="Documenten" />
@@ -822,15 +836,7 @@ function DocumentenContent() {
                   <td className="px-3 py-2 text-slate-500 tabular-nums">{formatSize(doc.grootte)}</td>
                   <td className="px-3 py-2 text-slate-500">{doc.gewijzigd}</td>
                   <td className="px-3 py-2 text-slate-500">{doc.aangemaakt}</td>
-                  <td className="px-3 py-2">
-                    <div className="flex gap-1 flex-wrap">
-                      {doc.labels.map((label) => (
-                        <span key={label} className="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-500">
-                          {label}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
+                  <td className="px-3 py-2"><div className="flex gap-1 flex-wrap">{doc.labels.map((label) => (<span key={label} className="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-500">{label}</span>))}</div></td>
                 </tr>
               ))}
             </tbody>
@@ -841,29 +847,17 @@ function DocumentenContent() {
   );
 }
 
-/* ─── Organizer: Meeting View ─── */
+/* ─── Organizer: Meeting View + Acties + Besluiten ─── */
 function OrganizerContent() {
-  const { meeting, genodigden, aanvragen } = organizerData;
-
+  const { meeting, genodigden, aanvragen, acties, besluiten, aanvragenSummary } = organizerData;
   return (
     <>
       <ModuleHeading icon="organizer" title="Organizer" />
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
-        {/* Meeting details */}
         <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden">
-          <div className="bg-indigo-950 px-4 py-2.5">
-            <h4 className="text-sm font-semibold text-white">{meeting.title}</h4>
-          </div>
+          <div className="bg-indigo-950 px-4 py-2.5"><h4 className="text-sm font-semibold text-white">{meeting.title}</h4></div>
           <div className="p-4 space-y-2">
-            {[
-              { label: "Omschrijving", value: meeting.omschrijving },
-              { label: "Start", value: meeting.start },
-              { label: "Eind", value: meeting.eind },
-              { label: "Locatie", value: meeting.locatie },
-              { label: "Notulist", value: meeting.notulist },
-              { label: "Gesloten", value: meeting.gesloten },
-            ].map((row) => (
+            {[{ label: "Omschrijving", value: meeting.omschrijving }, { label: "Start", value: meeting.start }, { label: "Eind", value: meeting.eind }, { label: "Locatie", value: meeting.locatie }, { label: "Notulist", value: meeting.notulist }, { label: "Gesloten", value: meeting.gesloten }].map((row) => (
               <div key={row.label} className="flex text-xs gap-4">
                 <span className="text-slate-400 w-24 shrink-0">{row.label}</span>
                 <span className="text-slate-600">{row.value}</span>
@@ -871,12 +865,8 @@ function OrganizerContent() {
             ))}
           </div>
         </div>
-
-        {/* Attendees */}
         <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden">
-          <div className="bg-indigo-950 px-4 py-2.5">
-            <h4 className="text-sm font-semibold text-white">Genodigden</h4>
-          </div>
+          <div className="bg-indigo-950 px-4 py-2.5"><h4 className="text-sm font-semibold text-white">Genodigden</h4></div>
           <div className="p-4">
             <div className="flex text-[10px] text-slate-400 gap-4 mb-2 pb-1 border-b border-slate-100">
               <span className="grow">Gebruiker</span>
@@ -893,12 +883,22 @@ function OrganizerContent() {
           </div>
         </div>
       </div>
-
-      {/* Applications table */}
+      <div className="grid grid-cols-3 gap-3 mb-4">
+        {[
+          { label: "Open aanvragen", count: aanvragenSummary.open.count, bedrag: aanvragenSummary.open.bedrag },
+          { label: "Goedgekeurde aanvragen", count: aanvragenSummary.goedgekeurd.count, bedrag: aanvragenSummary.goedgekeurd.bedrag },
+          { label: "Afgekeurde aanvragen", count: aanvragenSummary.afgekeurd.count, bedrag: aanvragenSummary.afgekeurd.bedrag },
+        ].map((card) => (
+          <div key={card.label} className="bg-white rounded-xl border border-slate-200/60 shadow-card p-3">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-[10px] text-slate-500 font-medium">{card.label} ({card.count})</span>
+            </div>
+            <p className="text-sm font-semibold text-slate-900 tabular-nums">&euro; {card.bedrag} &rsaquo;</p>
+          </div>
+        ))}
+      </div>
       <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden">
-        <div className="px-4 py-2.5 border-b border-slate-100">
-          <h4 className="text-sm font-semibold text-slate-900">Goedgekeurde aanvragen ({aanvragen.length})</h4>
-        </div>
+        <div className="px-4 py-2.5 border-b border-slate-100"><h4 className="text-sm font-semibold text-slate-900">Goedgekeurde aanvragen ({aanvragen.length})</h4></div>
         <div className="overflow-x-auto">
           <table className="w-full text-xs min-w-150">
             <thead>
@@ -913,15 +913,55 @@ function OrganizerContent() {
                 <tr key={i} className="border-b border-slate-50 hover:bg-slate-50/50">
                   <td className="px-3 py-2 text-slate-700 font-medium">{a.aanvrager}</td>
                   <td className="px-3 py-2 text-slate-500">{a.nummer}</td>
-                  <td className="px-3 py-2">
-                    <span className="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-green-50 text-green-700">
-                      {a.status}
-                    </span>
-                  </td>
-                  <td className="px-3 py-2 text-slate-600 tabular-nums">€ {a.gift}</td>
-                  <td className="px-3 py-2 text-slate-600 tabular-nums">€ {a.lening}</td>
+                  <td className="px-3 py-2"><span className="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-green-50 text-green-700">{a.status}</span></td>
+                  <td className="px-3 py-2 text-slate-600 tabular-nums">&euro; {a.gift}</td>
+                  <td className="px-3 py-2 text-slate-600 tabular-nums">&euro; {a.lening}</td>
                   <td className="px-3 py-2 text-slate-500">{a.stemmer}</td>
                   <td className="px-3 py-2 text-center">✓</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden mt-4">
+        <div className="px-4 py-2.5 border-b border-slate-100"><h4 className="text-sm font-semibold text-slate-900">Acties ({acties.length})</h4></div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                {["Gebruiker", "Omschrijving", "Aangemaakt", "Deadline", "Uitgevoerd"].map((col) => (
+                  <th key={col} className="text-left px-3 py-2 text-slate-500 font-medium whitespace-nowrap">{col}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {acties.map((actie, i) => (
+                <tr key={i} className="border-b border-slate-50 hover:bg-slate-50/50">
+                  <td className="px-3 py-2 text-slate-700 font-medium">{actie.gebruiker}</td>
+                  <td className="px-3 py-2 text-slate-500">{actie.omschrijving}</td>
+                  <td className="px-3 py-2 text-slate-500">{actie.aangemaakt || "\u2014"}</td>
+                  <td className="px-3 py-2 text-slate-500">{actie.deadline}</td>
+                  <td className="px-3 py-2 text-slate-500">{actie.uitgevoerd ? "✓" : "✗"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className="bg-white rounded-xl border border-slate-200/60 shadow-card overflow-hidden mt-4">
+        <div className="px-4 py-2.5 border-b border-slate-100"><h4 className="text-sm font-semibold text-slate-900">Besluiten ({besluiten.length})</h4></div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="text-left px-3 py-2 text-slate-500 font-medium">Omschrijving</th>
+              </tr>
+            </thead>
+            <tbody>
+              {besluiten.map((besluit, i) => (
+                <tr key={i} className="border-b border-slate-50 hover:bg-slate-50/50">
+                  <td className="px-3 py-2 text-slate-500">{besluit.omschrijving}</td>
                 </tr>
               ))}
             </tbody>
@@ -955,96 +995,86 @@ function DashboardMockup() {
 
   return (
     <div className="flex flex-col items-center">
+      {/* Interaction hint */}
+      <motion.div
+        className="hidden sm:flex items-center gap-2.5 self-start mb-5 ml-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 0.8 }}
+      >
+        <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59" />
+        </svg>
+        <span className="text-sm text-slate-400 tracking-wide">Klik op de modules om het platform te verkennen</span>
+        <motion.svg
+          className="w-4 h-4 text-slate-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          animate={{ y: [0, 3, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </motion.svg>
+      </motion.div>
+
       {/* Monitor bezel */}
       <div className="w-full rounded-2xl border-8 border-[#1a1a1a] bg-[#1a1a1a] shadow-[0_8px_40px_rgba(0,0,0,0.25)] overflow-hidden">
-        {/* Screen area */}
         <div className="rounded-lg overflow-hidden">
           {/* Chrome-style tab bar */}
           <div className="bg-[#dee1e6] pt-2 px-2 flex items-end gap-0">
-            {/* Traffic lights */}
             <div className="flex gap-1.5 px-2 pb-2.5 shrink-0">
               <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" />
               <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
               <span className="w-2.5 h-2.5 rounded-full bg-[#28C840]" />
             </div>
-            {/* Active tab */}
             <div className="flex items-center gap-2 bg-white rounded-t-lg px-4 py-1.5 max-w-48 min-w-0">
               <svg className="w-3.5 h-3.5 shrink-0 text-teal-500" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="7" /></svg>
               <span className="text-[11px] text-slate-500 truncate">Mijn Orchestra</span>
               <svg className="w-3 h-3 shrink-0 text-slate-400" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 3l6 6M9 3l-6 6" /></svg>
             </div>
-            {/* New tab button */}
             <div className="pb-1.5 px-1">
               <svg className="w-4 h-4 text-slate-400" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M8 3v10M3 8h10" /></svg>
             </div>
           </div>
-          {/* Chrome-style address bar */}
+          {/* Address bar */}
           <div className="bg-white px-3 py-1.5 flex items-center gap-2 border-b border-slate-200">
-            {/* Nav buttons */}
             <div className="flex items-center gap-1 shrink-0">
               <svg className="w-4 h-4 text-slate-300" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M10 3L5 8l5 5" /></svg>
               <svg className="w-4 h-4 text-slate-300" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 3l5 5-5 5" /></svg>
               <svg className="w-4 h-4 text-slate-400 ml-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M13.5 8A5.5 5.5 0 113 6" /><path d="M1 3.5L3 6l2.5-2" /></svg>
             </div>
-            {/* Address bar */}
             <div className="grow flex items-center bg-[#f1f3f4] rounded-full px-3 py-1 gap-2 min-w-0">
               <svg className="w-3 h-3 shrink-0 text-slate-400" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a4 4 0 00-4 4v2H3a1 1 0 00-1 1v6a1 1 0 001 1h10a1 1 0 001-1V8a1 1 0 00-1-1h-1V5a4 4 0 00-4-4zm2.5 6h-5V5a2.5 2.5 0 015 0v2z" /></svg>
               <span className="text-[11px] text-slate-500 truncate">ofis.orchestrabeheer.nl/{modulePaths[activeModule] || activeModule}</span>
             </div>
-            {/* Right icons */}
             <div className="flex items-center gap-1.5 shrink-0">
               <svg className="w-4 h-4 text-slate-400" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M8 2l1.8 3.6L14 6.4l-3 2.9.7 4.1L8 11.3 4.3 13.4l.7-4.1-3-2.9 4.2-.8z" /></svg>
               <svg className="w-4 h-4 text-slate-400" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="3" r="1.5" /><circle cx="8" cy="8" r="1.5" /><circle cx="8" cy="13" r="1.5" /></svg>
             </div>
           </div>
 
-          {/* Dashboard body — fixed height, scrollable content */}
+          {/* Dashboard body */}
           <div className="flex h-[520px] bg-surface">
             {/* Mobile tab bar */}
             <div className="flex sm:hidden overflow-x-auto border-b border-indigo-900 bg-indigo-950 px-2 py-1.5 gap-1 absolute left-0 right-0 z-10">
               {sidebarItems.map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => setActiveModule(item.label)}
-                  className={`shrink-0 px-3 py-1.5 rounded text-[10px] transition-colors whitespace-nowrap cursor-pointer ${
-                    activeModule === item.label
-                      ? "bg-indigo-900 text-white"
-                      : "text-indigo-300 hover:text-white"
-                  }`}
-                >
-                  {item.label}
-                </button>
+                <button key={item.label} onClick={() => setActiveModule(item.label)} className={`shrink-0 px-3 py-1.5 rounded text-[10px] transition-colors whitespace-nowrap cursor-pointer ${activeModule === item.label ? "bg-indigo-900 text-white" : "text-indigo-300 hover:text-white"}`}>{item.label}</button>
               ))}
             </div>
-
             {/* Sidebar */}
             <div className="hidden sm:flex flex-col w-44 bg-indigo-950 shrink-0 py-4">
               {sidebarItems.map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => setActiveModule(item.label)}
-                  className={`flex items-center gap-2.5 px-4 py-2 text-xs transition-colors text-left cursor-pointer ${
-                    activeModule === item.label
-                      ? "text-white bg-indigo-900 border-l-2 border-teal-400"
-                      : "text-indigo-300 hover:text-white border-l-2 border-transparent"
-                  }`}
-                >
+                <button key={item.label} onClick={() => setActiveModule(item.label)} className={`flex items-center gap-2.5 px-4 py-2 text-xs transition-colors text-left cursor-pointer ${activeModule === item.label ? "text-white bg-indigo-900 border-l-2 border-teal-400" : "text-indigo-300 hover:text-white border-l-2 border-transparent"}`}>
                   <SidebarIcon type={item.icon} className="w-4 h-4" />
                   <span>{item.label}</span>
                 </button>
               ))}
             </div>
-
-            {/* Main content — scrollable */}
+            {/* Main content */}
             <div className="grow p-4 sm:p-6 overflow-y-auto overflow-x-hidden">
               <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeModule}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
-                >
+                <motion.div key={activeModule} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }}>
                   {renderModuleContent(activeModule)}
                 </motion.div>
               </AnimatePresence>
@@ -1072,51 +1102,23 @@ export default function MijnOrchestra() {
   return (
     <PageTransition>
       {/* Hero */}
-      <section className="relative min-h-[45vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-br from-indigo-950 via-indigo-900 to-indigo-800" />
-        <div className="absolute top-0 right-0 w-100 h-100 bg-teal-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-75 h-75 bg-indigo-500/15 rounded-full blur-3xl" />
-
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20">
+      <section className="relative pt-32 pb-20 bg-white overflow-hidden">
+        <div className="absolute top-0 right-0 w-100 h-100 bg-indigo-100/60 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-75 h-75 bg-teal-100/40 rounded-full blur-3xl" />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
           <div className="max-w-3xl">
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="inline-block text-xs font-body font-semibold tracking-wide uppercase bg-white/10 text-teal-300 px-4 py-1.5 rounded-full backdrop-blur-sm mb-6"
-            >
+            <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="inline-block text-xs font-body font-semibold tracking-wide uppercase bg-indigo-50 text-indigo-600 px-4 py-1.5 rounded-full mb-6">
               Online Kantooromgeving
             </motion.span>
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white leading-[1.1] mb-6"
-            >
+            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }} className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-slate-900 leading-[1.1] mb-6">
               Mijn Orchestra
             </motion.h1>
-            <motion.div
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={{ opacity: 1, scaleX: 1 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="h-1 w-12 rounded-full bg-linear-to-r from-indigo-500 to-teal-400 origin-left mb-6"
-            />
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
-              className="text-lg lg:text-xl text-indigo-200 leading-relaxed max-w-2xl mb-10"
-            >
+            <motion.div initial={{ opacity: 0, scaleX: 0 }} animate={{ opacity: 1, scaleX: 1 }} transition={{ duration: 0.5, delay: 0.4 }} className="h-1 w-12 rounded-full bg-linear-to-r from-indigo-600 to-teal-500 origin-left mb-6" />
+            <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4 }} className="text-lg lg:text-xl text-slate-500 leading-relaxed max-w-2xl mb-10">
               Uw complete online kantooromgeving voor stichtingen en verenigingen. Veilig, overzichtelijk en altijd beschikbaar.
             </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-            >
-              <Button href={OFIS_URL} external variant="primary" size="lg">
-                Inloggen
-              </Button>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.6 }}>
+              <Button href={OFIS_URL} external variant="primary" size="lg">Inloggen</Button>
             </motion.div>
           </div>
         </div>
@@ -1124,12 +1126,7 @@ export default function MijnOrchestra() {
 
       {/* Platform overview */}
       <SectionWrapper bg="surface" size="lg">
-        <SectionHeading
-          eyebrow="Uw Platform"
-          title="Alles op één plek"
-          subtitle="Ontdek de krachtige modules die uw organisatie ondersteunen."
-        />
-
+        <SectionHeading eyebrow="Uw Platform" title="Alles op één plek" subtitle="Ontdek de krachtige modules die uw organisatie ondersteunen." />
         <StaggerChildren className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((f) => (
             <motion.div key={f.title} variants={staggerItem}>
@@ -1145,12 +1142,7 @@ export default function MijnOrchestra() {
 
       {/* Interactive dashboard */}
       <SectionWrapper bg="white" size="lg">
-        <SectionHeading
-          eyebrow="Interactieve Demo"
-          title="Ontdek het platform"
-          subtitle="Klik door de verschillende modules en ontdek wat MyOrchestra voor uw organisatie kan betekenen."
-        />
-
+        <SectionHeading eyebrow="Interactieve Demo" title="Ontdek het platform" subtitle="Klik door de verschillende modules en ontdek wat MyOrchestra voor uw organisatie kan betekenen." />
         <AnimatedSection className="mt-16" delay={0.2}>
           <DashboardMockup />
         </AnimatedSection>
@@ -1159,19 +1151,11 @@ export default function MijnOrchestra() {
       {/* CTA */}
       <SectionWrapper bg="dark">
         <AnimatedSection className="text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-white mb-6">
-            Klaar om te beginnen?
-          </h2>
-          <p className="text-lg text-indigo-200 mb-10">
-            Log direct in op uw MyOrchestra-omgeving of neem contact met ons op.
-          </p>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-slate-900 mb-6">Klaar om te beginnen?</h2>
+          <p className="text-lg text-slate-500 mb-10">Log direct in op uw MyOrchestra-omgeving of neem contact met ons op.</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <Button href={OFIS_URL} external variant="primary" size="lg">
-              Inloggen
-            </Button>
-            <Button href="/contact" variant="outline-light" size="lg">
-              Neem Contact Op
-            </Button>
+            <Button href={OFIS_URL} external variant="primary" size="lg">Inloggen</Button>
+            <Button href="/contact" variant="outline" size="lg">Neem Contact Op</Button>
           </div>
         </AnimatedSection>
       </SectionWrapper>
