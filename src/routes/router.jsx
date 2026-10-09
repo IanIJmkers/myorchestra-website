@@ -9,7 +9,7 @@ import SolutionDocumentVault from "../pages/SolutionDocumentVault";
 import OurClients from "../pages/OurClients";
 import AboutUs from "../pages/AboutUs";
 import Contact from "../pages/Contact";
-import MijnOrchestra from "../pages/MijnOrchestra";
+import MyOrchestra from "../pages/MyOrchestra";
 import NotFound from "../pages/NotFound";
 
 export const router = createBrowserRouter([
@@ -65,9 +65,9 @@ export const router = createBrowserRouter([
         handle: { title: "Contact" },
       },
       {
-        path: "mijn-orchestra",
-        element: <MijnOrchestra />,
-        handle: { title: "Mijn Orchestra" },
+        path: "myorchestra",
+        element: <MyOrchestra />,
+        handle: { title: "MyOrchestra" },
       },
     ],
   },

@@ -1030,7 +1030,7 @@ function DashboardMockup() {
             </div>
             <div className="flex items-center gap-2 bg-white rounded-t-lg px-4 py-1.5 max-w-48 min-w-0">
               <svg className="w-3.5 h-3.5 shrink-0 text-teal-500" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="7" /></svg>
-              <span className="text-[11px] text-slate-500 truncate">Mijn Orchestra</span>
+              <span className="text-[11px] text-slate-500 truncate">MyOrchestra</span>
               <svg className="w-3 h-3 shrink-0 text-slate-400" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 3l6 6M9 3l-6 6" /></svg>
             </div>
             <div className="pb-1.5 px-1">
@@ -1091,7 +1091,7 @@ function DashboardMockup() {
 }
 
 /* ─── Page Component ─── */
-export default function MijnOrchestra() {
+export default function MyOrchestra() {
   const features = [
     { icon: featureIcons[0], title: "Overzichtelijk Dashboard", description: "Direct inzicht in alle belangrijke informatie van uw organisatie." },
     { icon: featureIcons[1], title: "Veilige Documentopslag", description: "Al uw documenten veilig bewaard en eenvoudig terug te vinden." },
@@ -1111,7 +1111,7 @@ export default function MijnOrchestra() {
               Online Kantooromgeving
             </motion.span>
             <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }} className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-slate-900 leading-[1.1] mb-6">
-              Mijn Orchestra
+              MyOrchestra
             </motion.h1>
             <motion.div initial={{ opacity: 0, scaleX: 0 }} animate={{ opacity: 1, scaleX: 1 }} transition={{ duration: 0.5, delay: 0.4 }} className="h-1 w-12 rounded-full bg-linear-to-r from-indigo-600 to-teal-500 origin-left mb-6" />
             <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4 }} className="text-lg lg:text-xl text-slate-500 leading-relaxed max-w-2xl mb-10">

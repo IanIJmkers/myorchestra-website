@@ -1,4 +1,7 @@
 {
+  "redirects": [
+    { "source": "/mijn-orchestra", "destination": "/myorchestra", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]

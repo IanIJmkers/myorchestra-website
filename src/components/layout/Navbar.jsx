@@ -108,10 +108,10 @@ export default function Navbar() {
             {/* Right side */}
             <div className="hidden lg:flex items-center gap-3">
               <Link
-                to="/mijn-orchestra"
+                to="/myorchestra"
                 className="px-5 py-2.5 text-sm font-semibold bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 transition-colors duration-200"
               >
-                Mijn Orchestra
+                MyOrchestra
               </Link>
             </div>
 
