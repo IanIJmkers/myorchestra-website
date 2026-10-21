@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "node -e \"require('fs').rmSync('node_modules/flatted/php',{recursive:true,force:true})\""
   },
   "dependencies": {
     "motion": "^12.34.1",
