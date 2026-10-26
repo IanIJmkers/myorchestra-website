@@ -59,7 +59,7 @@ export const modules = [
         eyebrow: "Aanvraagformulier",
         title: "Op maat gemaakt in uw huisstijl",
         description:
-          "Samen met uw organisatie maken we een op maat gemaakt aanvraagformulier in uw eigen huisstijl die vervolgens eenvoudig te integreren is op uw website.",
+          "Het formulier sluit aan op de uitstraling van uw organisatie en staat op uw eigen website. Ingediende aanvragen komen direct binnen in MyOrchestra.",
         image: "/images/solutions/project-admin/aanvraagformulier.png",
       },
       {
@@ -82,7 +82,7 @@ export const modules = [
         number: 1,
         title: "Aanvraagformulier",
         description:
-          "Samen met uw organisatie maken we een op maat gemaakt aanvraagformulier dat vervolgens eenvoudig te integreren is op uw website.",
+          "De aanvrager vult het formulier op uw website in en dient de aanvraag in.",
       },
       {
         number: 2,
@@ -100,7 +100,7 @@ export const modules = [
         number: 4,
         title: "Ter beoordeling",
         description:
-          "Het bestuur brengt via MyOrchestra een stem uit op de aanvraag. Aan de hand van de ingediende stemmen zal een aanvraag toegekend of afgewezen worden.",
+          "Bestuursleden stemmen in MyOrchestra over de aanvraag. De uitslag bepaalt of de aanvraag wordt toegekend of afgewezen.",
       },
       {
         number: 5,
